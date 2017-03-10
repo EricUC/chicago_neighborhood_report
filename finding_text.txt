@@ -1,0 +1,25 @@
+Single Location Analysis text:
+
+Summary:
+  Within the radius of __radius__, this location's neighborhood is safe/not safe, quiet/noisy, and convenient/inconvenient.
+
+Crime histogram:
+Safety report
+  This location is (safer/more dangerous) than Chicago average.
+  Last year, its crime rate is __% lower/higher than Chicago average.
+
+crime pie chart:
+  __type__ is prevalent in this neighborhood.
+
+noise radar:
+  This neighborhood is a relatively quiet/noisy, with most of the noise comes/come from __noise type__ (& __noise type 2__)
+
+convenience histogram:
+  This 
+
+Multi location comparison:
+  Summary:
+  Crime histogram:
+  crime pie chart:
+  noise radar:
+  convenience histogram:
