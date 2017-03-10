@@ -46,6 +46,7 @@ def get_city_info(location, radius):
     # result['life_result'] = life_result
     # result.update(crime_result)
     # return result
+    print('get_city_info')
     redis_client = redis.StrictRedis()
     keys = []
     print('get task city info %s' % time_str())
@@ -62,11 +63,15 @@ def get_city_info(location, radius):
     result_data = redis_client.blpop(crime_result_key)[1].decode('utf-8')
     city_info = json.loads(result_data)
     print('get the noise result %s' % time_str())
-    noise_int = int(redis_client.blpop(noise_int_key)[1].decode('utf-8'))
-    city_info['noise'] = noise_int
+    noise_data_raw = redis_client.blpop(noise_int_key)[1].decode('utf-8')
+    print('noise_data_raw: %s' % noise_data_raw)
+    noise_data = json.loads(noise_data_raw)
+    city_info['noise'] = noise_data
     print('get the life_result %s' % time_str())
     life_result = json.loads(redis_client.blpop(life_result_key)[1].decode('utf-8'))
     city_info['life_result'] = life_result
+    print('city_info')
+    print(city_info)
     return city_info
 
 
@@ -161,6 +166,7 @@ def safetyview(request):
 
 
 def rankview(request):
+    print('get your rank request')
     print(request.body.decode('utf8'))
     data = json.loads(request.body.decode('utf8'))
     locations = data['locations']

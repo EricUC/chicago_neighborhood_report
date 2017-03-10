@@ -44,8 +44,8 @@ class Command(BaseCommand):
                 print('task crime_result done %s' % time_str())
             if data['type'] == 'noise_int':
                 print('get task noise_int %s' % time_str())
-                noise_int = crawl_noise.crawl_noise(data['params']['address'])
-                redis_client.rpush(data['return_key'], noise_int)
+                noise_int = crawl_noise.crawl_noise_all(data['params']['address'])
+                redis_client.rpush(data['return_key'], json.dumps(noise_int))
                 print('task noise_int done %s' % time_str())
             if data['type'] == 'life_result':
                 print('get task life_result %s' % time_str())

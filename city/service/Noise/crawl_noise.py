@@ -36,6 +36,40 @@ def crawl_noise(address):
 
     return score
 
+def crawl_noise_all(address):
+    response = requests.get(
+        url='http://howloud.com/howloud_clean/widget-amazon.php',
+        params={
+            'address': address,
+        }
+    )
+    soup = bs4.BeautifulSoup(response.text, 'html.parser')
+
+    score, traffic, airport, local = soup.find_all('h3')
+
+    score = int(score.find_all('span', style = 'color: #000;')[0].contents[0])
+
+    score_match = {
+      'calm': 85,
+      'active': 75,
+      'busy': 65,
+    }
+
+    traffic = score_match.get(traffic.contents[2].extract().lower(), 75)
+
+    airport = score_match.get(airport.contents[2].extract().lower(), 75)
+
+    local = score_match.get(local.contents[2].extract().lower(), 75)
+
+    return {
+        'score': score,
+        'traffic': traffic,
+        'airport': airport,
+        'local': local,
+    }
+
+
+
 
 
 # Test examples

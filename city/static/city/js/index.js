@@ -24,6 +24,7 @@ var get_safety = function(dom) {
     data: data,
     type: 'get',
     success: function(response) {
+      //  redraw the column graph
       var singleChart = echarts.init(document.getElementById('single-graph'));
       singleOption = {
         tooltip : {
@@ -76,6 +77,119 @@ var get_safety = function(dom) {
         ]
       };
       singleChart.setOption(singleOption)
+      // redraw the pie graph
+      var singlePieChart = echarts.init(document.getElementById('single-pie-graph'));
+      singlePieOption = {
+        backgroundColor: '#2c343c',
+
+        title: {
+          text: 'Crime Pie',
+          left: 'center',
+          top: 20,
+          textStyle: {
+              color: '#ccc'
+          }
+        },
+
+        tooltip : {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+        visualMap: {
+          show: false,
+          min: 80,
+          max: 600,
+          inRange: {
+              colorLightness: [0, 1]
+          }
+        },
+        series : [
+          {
+            name:'type',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '50%'],
+            data:[
+              {value:response['area violence'], name:'violence'},
+              {value:response['area residential'], name:'residential'},
+              {value:response['area property'], name:'property'},
+            ].sort(function (a, b) { return a.value - b.value}),
+            roseType: 'angle',
+            label: {
+              normal: {
+                  textStyle: {
+                      color: 'rgba(255, 255, 255, 0.3)'
+                  }
+              }
+            },
+            labelLine: {
+              normal: {
+                  lineStyle: {
+                      color: 'rgba(255, 255, 255, 0.3)'
+                  },
+                  smooth: 0.2,
+                  length: 10,
+                  length2: 20
+              }
+            },
+            itemStyle: {
+              normal: {
+                  color: '#c23531',
+                  shadowBlur: 200,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            },
+
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function (idx) {
+                return Math.random() * 200;
+            }
+          }
+        ]
+      };
+      singlePieChart.setOption(singlePieOption);
+
+      // redraw the radio graph 
+      var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
+      noise_values = [
+        response['noise']['score'],
+        response['noise']['traffic'],
+        response['noise']['airport'],
+        response['noise']['local'],
+      ]
+      singelRadioOption = {
+          title: {
+              text: 'noise graph'
+          },
+          tooltip: {},
+          legend: {
+              data: ['Noise info']
+          },
+          radar: {
+              // shape: 'circle',
+              indicator: [
+                 { name: 'score', max: 200},
+                 { name: 'traffic', max: 200},
+                 { name: 'airport', max: 200},
+                 { name: 'local', max: 200},
+              ]
+          },
+          series: [{
+              name: 'noise ',
+              type: 'radar',
+              // areaStyle: {normal: {}},
+              data : [
+                  {
+                      value : noise_values,
+                      name : 'Noise info'
+                  },
+              ]
+          }]
+      };
+      singleRadioChart.setOption(singelRadioOption);
+
     }
   });
 }
@@ -150,9 +264,9 @@ var get_rank = function(dom) {
       results_for_table = [];
       for (var i=0; i<locations.length; i++) {
         data_dict = {
-          'area total': results[i]['area total'] * crimeweight,
-          'noise': results[i]['noise'] * noiseweight,
-          'transport': results[i]['life_result']['transport'] * convenientweight,
+          'area total': results[i]['area total'] * crimeweight / 100,
+          'noise': results[i]['noise']['score'] * noiseweight / 100,
+          'transport': results[i]['life_result']['transport'] * convenientweight / 100,
           'name': locations[i]
         };
         data_dict['score'] = data_dict['area total'] + data_dict['noise'] + data_dict['transport'];
@@ -237,7 +351,7 @@ var init = function() {
       }
     },
     legend: {
-      data:['city1','city2','city3']
+      data:['location1','location2','location3']
     },
     grid: {
       left: '3%',
@@ -258,17 +372,17 @@ var init = function() {
     ],
     series : [
       {
-          name:'city1',
+          name:'location1',
           type:'bar',
           data:[120, 332, 301, 334]
       },
       {
-          name:'city2',
+          name:'location2',
           type:'bar',
           data:[120, 132, 101, 134]
       },
       {
-          name:'city3',
+          name:'location3',
           type:'bar',
           data:[120, 132, 101, 134]
       },
@@ -295,9 +409,117 @@ var init = function() {
       {field: 'total', title: 'total', sortable: true},
     ],
     data: [
-      {'name': 'city1', 'score': 80, 'area total': 14, 'noise': 43, 'transport': 63,},
-      {'name': 'city2', 'score': 70, 'area total': 13, 'noise': 33, 'transport': 33,},
+      {'name': 'location1', 'score': 80, 'area total': 14, 'noise': 43, 'transport': 63,},
+      {'name': 'location2', 'score': 70, 'area total': 13, 'noise': 33, 'transport': 33,},
     ],
   })
-}
 
+
+  // init the pie graph
+  var singlePieChart = echarts.init(document.getElementById('single-pie-graph'));
+  singlePieOption = {
+    backgroundColor: '#2c343c',
+
+    title: {
+      text: 'Crime Pie',
+      left: 'center',
+      top: 20,
+      textStyle: {
+          color: '#ccc'
+      }
+    },
+
+    tooltip : {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+
+    visualMap: {
+      show: false,
+      min: 80,
+      max: 600,
+      inRange: {
+          colorLightness: [0, 1]
+      }
+    },
+    series : [
+      {
+        name:'type',
+        type:'pie',
+        radius : '55%',
+        center: ['50%', '50%'],
+        data:[
+          {value:335, name:'violence'},
+          {value:310, name:'residential'},
+          {value:274, name:'property'},
+        ].sort(function (a, b) { return a.value - b.value}),
+        roseType: 'angle',
+        label: {
+          normal: {
+              textStyle: {
+                  color: 'rgba(255, 255, 255, 0.3)'
+              }
+          }
+        },
+        labelLine: {
+          normal: {
+              lineStyle: {
+                  color: 'rgba(255, 255, 255, 0.3)'
+              },
+              smooth: 0.2,
+              length: 10,
+              length2: 20
+          }
+        },
+        itemStyle: {
+          normal: {
+              color: '#c23531',
+              shadowBlur: 200,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+
+        animationType: 'scale',
+        animationEasing: 'elasticOut',
+        animationDelay: function (idx) {
+            return Math.random() * 200;
+        }
+      }
+    ]
+  };
+  singlePieChart.setOption(singlePieOption);
+
+
+  // init the radio graph
+  var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
+  singelRadioOption = {
+      title: {
+          text: 'noise graph'
+      },
+      tooltip: {},
+      legend: {
+          data: ['Noise info']
+      },
+      radar: {
+          // shape: 'circle',
+          indicator: [
+             { name: 'score', max: 200},
+             { name: 'traffic', max: 200},
+             { name: 'airport', max: 200},
+             { name: 'local', max: 200},
+          ]
+      },
+      series: [{
+          name: 'noise ',
+          type: 'radar',
+          // areaStyle: {normal: {}},
+          data : [
+              {
+                  value : [72, 50, 72, 89],
+                  name : 'Noise info'
+              },
+          ]
+      }]
+  };
+  singleRadioChart.setOption(singelRadioOption);
+}

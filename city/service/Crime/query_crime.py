@@ -35,7 +35,7 @@ def query_crime_within(address, radius = 0.25):
 
     lat, lng = geocode.get_latlng(address, JIYE_KEY)
     #print(lng, lat)
-    conn = sqlite3.connect(os.path.join(settings.BASE_DIR, 'city/service/Crime/crime_data_20170304.db'))
+    conn = sqlite3.connect(os.path.join(settings.BASE_DIR, 'city/service/Crime/mar4.db'))
     c = conn.cursor()
 
     conn.create_function('haversine', 4, haversine)
