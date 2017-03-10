@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <title>Rate ma hooz</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="/static/city/js/jquery-3.1.0.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap3/css/bootstrap.min.css">
+    <link href="/static/bootstrap-slider/bootstrap-slider.css" rel="stylesheet">
+    <link href="/static/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet/less" type="text/css" href="/static/city/index.less">
+    <script src="/static/js/less.min.js"></script>
+    <script src="/static/js/echarts.js"></script>
+    <script src="/static/city/js/index.js"></script>
+  </head>
+  <body onload="init()">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Team Han-Ji-Ji presents</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-hand-right"></span>&nbsp;&nbsp;Fun&nbsp;with&nbsp;hán-jī-jī</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <h1>Chicago Neighborhood Report</h1>
+    <hr>
+    <div class="container-fluid text-left">
+      <div class="row content">
+        <div class="col-sm-2 sidenav">
+          <h2><a>Single Location Analysis:</a></h2>
+            <script>
+            var get_safety = function(dom) {
+              console.log(wx=dom)
+              data = {
+                'location': $('#location')[0].value,
+                'radius': $('#radius')[0].value,
+              };
+              console.log(data);
+              $.ajax({
+                url: '/city/rank/',
+                data: JSON.stringify(data),
+                type: 'post',
+                url: '/city/safety',
+                data: data,
+                type: 'get',
+                success: function(response) {
+                  document.getElementById("result2").innerText = JSON.stringify(response)
+                  document.getElementById("result").innerText = JSON.stringify(response)
+                }
+              });
+            }
+          </script>
+    <div class="body">
+      <div class="control-panel">
+        <div class="single-panel">
+          <h4>Single Location Analysis</h4><br>
+          <strong>Your prefered location</strong><br>
+          <input class="input" type='text' id="location" value='5455 S blackstone ave'><br>
+          <strong>Range</strong><br>
+          <input type="text" id="radius" value='1'>mile<br>
+          <strong>Analysis Parts</strong><br>
+          Crime/Safety: Yes<input type='radio' name='crime' value=True> No<input type='radio' name='crime' value=False><br>
+          Noise: Yes<input type='radio' name='noise' value=True> No<input type='radio' name='noise' value=False><br>
+          Convenience: Yes<input type='radio' name='convenience' value=True> No<input type='radio' name='convenience' value=False><br>
+          <button onclick="get_safety(this)">submit</button>
+        </div>
+        <div class="multiple-panel">
+          <h2><a>Multiple Neighborhood Comparison</a></h2>
+          <div id="locations">
+            <input type="text" class="location" value='5455 S blackstone ave'>
+            <input type="text" class="location" value='1001 S. South State Street, Chicago, IL 60615'>
+          </div>
+          <button onclick="add_city_input()">Add more address</button>
+            <input type="text" id="radius2" value='1'>mile
+          <button onclick="get_rank(this)">submit</button><br>
+          crime weight: <br><input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          noise weight: <br><input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+        </div>
+      </div>
+      <div class="right graph-container">
+        <div class="single-graph">
+          <div id="single-graph" style="width: 600px; height: 400px;">
+          </div>
+        </div>
+        <div class="multi-graph">
+          <div id="multi-graph" style="width: 600px; height: 400px;">
+          </div>
+        </div>
+        <div class="table">
+          <table data-toggle="table" id="multi-table">
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="/static/bootstrap3/js/tether.min.js"></script>
+    <script src="/static/bootstrap3/js/bootstrap.min.js"></script>
+    <script src="/static/bootstrap-slider/bootstrap-slider.js"></script>
+    <script src="/static/bootstrap-table/bootstrap-table.min.js"></script>
+  </body>
+</html>

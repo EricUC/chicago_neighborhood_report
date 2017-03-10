@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>city</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="./static/city/js/jquery-3.1.0.js"></script>
+    <link rel="stylesheet" href="./static/bootstrap3/css/bootstrap.min.css">
+    <link href="./static/bootstrap-slider/bootstrap-slider.css" rel="stylesheet">
+    <link href="./static/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link rel="stylesheet/less" type="text/css" href="./static/city/index.less"> 
+    <script src="./static/js/less.min.js"></script>
+    <script src="./static/js/echarts.js"></script>
+    <script src="./static/city/js/index.js"></script>
+  </head>
+  <body onload="init()">
+    <h1>City of Chicago Apartment Finder</h1>
+    <hr>
+    <div class="body">
+      <div class="control-panel">
+        <div class="single-panel">
+          <h4>Single location Analysis</h4><br>
+          <strong>Your prefered location</strong><br>
+          <input class="input" type='text' id="location" value='5455 S blackstone ave'><br>
+          <strong>Range</strong><br>
+          <input type="text" id="radius" value='1.5'>mile<br>
+          <strong>Analysis Parts</strong><br>
+          Crime/Safety: Yes<input type='radio' name='crime' value=True> No<input type='radio' name='crime' value=False><br>
+          Noise: Yes<input type='radio' name='noise' value=True> No<input type='radio' name='noise' value=False><br>
+          Convenience: Yes<input type='radio' name='convenience' value=True> No<input type='radio' name='convenience' value=False><br>
+          <button onclick="get_safety(this)">click me</button>
+        </div>
+        <div class="multiple-panel">
+          Multiple Locations Comparison
+          <div id="locations">
+            <input type="text" class="location" value='5455 S blackstone ave'>
+            <input type="text" class="location" value='1001 S. South State Street, Chicago, IL 60615'>
+          </div>
+          <button onclick="add_city_input()">Add a new city</button><br>
+          <input type="text" id="radius2" value='1.5'>mile<br>
+          <button onclick="get_rank(this)">click me</button><br>
+          crime weight: <br><input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          noise weight: <br><input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+        </div>
+      </div>
+      <div class="right graph-container">
+        <div class="single-graph">
+          <div id="single-graph" style="width: 600px; height: 400px;">
+          </div>
+        </div>
+        <div class="multi-graph">
+          <div id="multi-graph" style="width: 600px; height: 400px;">
+          </div>
+        </div>
+        <div class="table">
+          <table data-toggle="table" id="multi-table">
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="./static/bootstrap3/js/tether.min.js"></script>   
+    <script src="./static/bootstrap3/js/bootstrap.min.js"></script>
+    <script src="./static/bootstrap-slider/bootstrap-slider.js"></script>
+    <script src="./static/bootstrap-table/bootstrap-table.min.js"></script>
+  </body>
+</html>
