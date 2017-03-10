@@ -298,7 +298,7 @@ var add_city_input = function() {
 var init = function() {
   console.log("page loaded");
 
-  // init the single city graph
+  // init the single city graph    # single_graph
   var singleChart = echarts.init(document.getElementById('single-graph'));
   singleOption = {
     tooltip : {
@@ -308,7 +308,7 @@ var init = function() {
       }
     },
     legend: {
-      data:['area','total']
+      data:['Toggle Area','Toggle City Average']
     },
     grid: {
       left: '3%',
@@ -319,7 +319,7 @@ var init = function() {
     xAxis : [
       {
         type : 'category',
-        data : ['total','violence','residential','property']
+        data : ['Total','Violence','Residential','Property']
       }
     ],
     yAxis : [
@@ -329,18 +329,21 @@ var init = function() {
     ],
     series : [
       {
-          name:'area',
+          name:'Toggle Area',
           type:'bar',
-          data:[120, 332, 301, 334]
+          data:[967, 332, 301, 334]
       },
       {
-          name:'city',
+          name:'Toggle City Average',
           type:'bar',
-          data:[120, 132, 101, 134]
+          data:[367, 132, 101, 134]
       },
     ]
   };
   singleChart.setOption(singleOption)
+
+
+
 
   var multiChart = echarts.init(document.getElementById('multi-graph'));
   multiOption = {
@@ -358,11 +361,12 @@ var init = function() {
       right: '4%',
       bottom: '3%',
       containLabel: true
-    },
+
+    }, //#@2 multi_chart
     xAxis : [
       {
         type : 'category',
-        data : ['total','violence','residential','property']
+        data : ['Total','Violence','Residential','Property']
       }
     ],
     yAxis : [
@@ -494,7 +498,7 @@ var init = function() {
   var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
   singelRadioOption = {
       title: {
-          text: 'noise graph',
+          text: 'Noise Graph',
           left: 'center',
           top:-5,
 
@@ -505,12 +509,12 @@ var init = function() {
           left:'right',
       },
       radar: {
-          // shape: 'circle',
+          // shape: 'circle', radar_label
           indicator: [
-             { name: 'score', max: 200},
-             { name: 'traffic', max: 200},
-             { name: 'airport', max: 200},
-             { name: 'local', max: 200},
+             { name: 'Overall', max: 200},
+             { name: 'Traffic', max: 200},
+             { name: 'Airport', max: 200},
+             { name: 'Local', max: 200},
           ]
       },
       series: [{
