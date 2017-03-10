@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>rate my hooz</title>
+    <title>rate ma hooz</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <script src="/static/city/js/jquery-3.1.0.js"></script>
     <link rel="stylesheet" href="/static/bootstrap3/css/bootstrap.min.css">
@@ -43,7 +43,7 @@
     <div class="container-fluid text-left">
       <div class="row content">
         <div class="col-sm-2 sidenav">
-          <h2><a>Single Location Analysis:</a></h2>
+
             <script>
             var get_safety = function(dom) {
               console.log(wx=dom)
@@ -71,15 +71,16 @@
       <div class="control-panel">
         <div class="single-panel">
           <!-- <h4>Single location Analysis</h4><br> -->
-          <strong>Your preferred location</strong><br>
+          <h2><a>Analyze Single Location:</a></h2>
+          <strong>Input address below:&nbsp;</strong><br>
           <input class="input" type='text' id="location" value='5455 S blackstone ave'><br>
-          <strong>Range</strong><br>
-          <input type="text" id="radius" value='1'>mile<br>
-          <strong>Analysis Parts</strong><br>
-          Crime/Safety: Yes<input type='radio' name='crime' value=True> No<input type='radio' name='crime' value=False><br>
-          Noise: Yes<input type='radio' name='noise' value=True> No<input type='radio' name='noise' value=False><br>
-          Convenience: Yes<input type='radio' name='convenience' value=True> No<input type='radio' name='convenience' value=False><br>
-          <button onclick="get_safety(this)" class="btn btn-info" style='margin-center: 120px'>Search</button>
+          <strong>Radius</strong><br>
+          <input type="text" id="radius" value='1'>&nbsp;mile<br>
+          <strong>Filter</strong><br>
+          Crime/Safety: Yes&nbsp;<input type='radio' name='crime' value=True> No&nbsp;<input type='radio' name='crime' value=False><br>
+          Noise: Yes&nbsp;<input type='radio' name='noise' value=True> No&nbsp;<input type='radio' name='noise' value=False><br>
+          Convenience: Yes&nbsp;<input type='radio' name='convenience' value=True> No&nbsp;<input type='radio' name='convenience' value=False><br>
+          <button onclick="get_safety(this)" class="btn btn-info" style='margin-center: 120px'>Submit</button>
         </div>
         <div class="multiple-panel">
 
@@ -88,12 +89,12 @@
             <input type="text" class="location" value='5455 S blackstone ave'>
             <input type="text" class="location" value='1001 S. South State Street, Chicago, IL 60615'>
           </div>
-          <button onclick="add_city_input()" class="btn">Add new address</button><br>
-            <input type="text" id="radius2" value='1'>mile<br>
+          <button onclick="add_city_input()" class="btn">Add more address</button><br>
+            <input type="text" id="radius2" value='1'>&nbsp;mile<br>
           <button onclick="get_rank(this)" class="btn btn-info" style="margin-center: 120px">Search</button><br>
-          crime weight: <br><input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
-          noise weight: <br><input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
-          convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          Crime weight: <br><input id="crime-weight" type="text" data-slider-max="3" data-slider-step="1"><br>
+          Noise weight: <br><input id="noise-weight" type="text" data-slider-max="3" data-slider-step="1"><br>
+          Convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="3" data-slider-step="1"><br>
         </div>
       </div>
       <div class="right graph-container">

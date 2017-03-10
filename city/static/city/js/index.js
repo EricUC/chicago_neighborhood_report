@@ -362,7 +362,9 @@ var init = function() {
       bottom: '3%',
       containLabel: true
 
+
     }, //#@2 multi_chart
+
     xAxis : [
       {
         type : 'category',
