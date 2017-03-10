@@ -151,7 +151,7 @@ var get_safety = function(dom) {
       };
       singlePieChart.setOption(singlePieOption);
 
-      // redraw the radio graph 
+      // redraw the radio graph
       var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
       noise_values = [
         response['noise']['score'],
@@ -161,7 +161,7 @@ var get_safety = function(dom) {
       ]
       singelRadioOption = {
           title: {
-              text: 'noise graph'
+              text: 'Noise Graph'
           },
           tooltip: {},
           legend: {
@@ -418,14 +418,14 @@ var init = function() {
   // init the pie graph
   var singlePieChart = echarts.init(document.getElementById('single-pie-graph'));
   singlePieOption = {
-    backgroundColor: '#2c343c',
+    //backgroundColor: '#000000',
 
     title: {
-      text: 'Crime Pie',
+      text: 'Crime Category Breakdown',
       left: 'center',
       top: 20,
       textStyle: {
-          color: '#ccc'
+          color: '#000'
       }
     },
 
@@ -457,14 +457,14 @@ var init = function() {
         label: {
           normal: {
               textStyle: {
-                  color: 'rgba(255, 255, 255, 0.3)'
+                  color: 'rgba(0, 0, 0, 0.7)'
               }
           }
         },
         labelLine: {
           normal: {
               lineStyle: {
-                  color: 'rgba(255, 255, 255, 0.3)'
+                  color: 'rgba(0, 0, 0, 0.7)'
               },
               smooth: 0.2,
               length: 10,
@@ -494,11 +494,15 @@ var init = function() {
   var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
   singelRadioOption = {
       title: {
-          text: 'noise graph'
+          text: 'noise graph',
+          left: 'center',
+          top:-5,
+
       },
       tooltip: {},
       legend: {
-          data: ['Noise info']
+          data: ['Noise info'],
+          left:'right',
       },
       radar: {
           // shape: 'circle',
