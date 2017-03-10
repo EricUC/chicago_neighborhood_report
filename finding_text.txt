@@ -9,17 +9,34 @@ Safety report
   Last year, its crime rate is __% lower/higher than Chicago average.
 
 crime pie chart:
-  __type__ is prevalent in this neighborhood.
+  __type__ is prevalent crime type in this neighborhood.
 
 noise radar:
   This neighborhood is a relatively quiet/noisy, with most of the noise comes/come from __noise type__ (& __noise type 2__)
 
-convenience histogram:
-  This 
+Convenience histogram:
+  The travel time between __input address__ and  __commute address__ is __minutes__, if that is a workplace, You would spent __hours__ on commute each week.
+  The travel time to downtown is __minutes__.
+  The travel time to O'hare is __minutes__; the travel time to Midway is __minutes__.
 
-Multi location comparison:
-  Summary:
-  Crime histogram:
-  crime pie chart:
-  noise radar:
-  convenience histogram:
+Multi-location comparison (up to four locations):
+
+
+Summary:
+  __location 1/2/3/4__ is the better(if two addresses)/best(if more than two address) neighborhood.
+  It is safe, quiet, convenient.
+
+crime histogram:
+  __location 1/2/3/4__ is the safest neighborhood.
+  Last year, its crime rate is __% lower/higher than Chicago average.
+
+crime pie chart:
+  __type__ is prevalent crime type in this neighborhood.
+
+noise radar:
+  __location 1/2/3/4__ is the quieter/quietest neighborhood. with most of the noise comes/come from __noise type__ (& __noise type 2__)
+
+convenience histogram:
+  __location 1__ is closer to your workplace, downtown, and airports.
+  __location 2__ has more shops/restaurants.
+  __location 3__
