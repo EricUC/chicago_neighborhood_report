@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- {% load static %} -->
 <html lang="en">
   <head>
     <title>rate ma hooz</title>
@@ -11,10 +12,29 @@
     <script src="/static/js/less.min.js"></script>
     <script src="/static/js/echarts.js"></script>
     <script src="/static/city/js/index.js"></script>
+    <link href='//fonts.googleapis.com/css?family=Raleway Dots' rel='stylesheet'>
+    <link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <link href='//fonts.googleapis.com/css?family=Alfa Slab One' rel='stylesheet'>
+    <style>
+    c {
+        font-family: 'Alfa Slab One';font-size: 50px;
+    }
+    d {
+        font-family: 'Raleway Dots';font-size: 28px;
+    }
+    e {
+        font-family: 'Raleway';font-size: 28px;
+    }
+    f {
+      font-family: 'Raleway';font-size: 16px;
+    }
+
+
+    </style>
   </head>
   <body onload="init()">
 
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -22,23 +42,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Logo</a>
+          <!-- <a class="navbar-brand" href="#">Han-ji-ji presents</a> -->
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href=http://assets.itsnicethat.com/system/files/112013/5285f8085c3e3c49b9000347/images_slice_large/05867074.jpg?1438258500>About</a></li>
+            <li><a href=https://68.media.tumblr.com/a5a8de55e4b694da3a23b71b3212c732/tumblr_oida28mn2P1qaruxco1_1280.jpg>FAQs</a></li>
+            <li><a href=http://www.penccil.com/files/U_48_238918971351_68730_102845.jpg>Contact</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-hand-right"></span>&nbsp;&nbsp;Fun&nbsp;with&nbsp;hán-jī-jī</a></li>
+            <li><a href=https://s-media-cache-ak0.pinimg.com/originals/08/62/8a/08628a9c651d8ddf5f86804fabd05774.jpg>
+              <span class="glyphicon glyphicon-hand-right"></span>&nbsp;&nbsp;Fun&nbsp;with&nbsp;hán-jī-jī</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <h1>Chicago Neighborhood Report</h1>
+    <c>&nbsp;Chicago Neighborhood Report</c>
     <hr>
     <div class="container-fluid text-left">
       <div class="row content">
@@ -69,45 +90,151 @@
 
     <div class="body">
       <div class="control-panel">
-        <div class="single-panel">
+        <div class="single-panel"><span padding-right='20px'>
           <!-- <h4>Single location Analysis</h4><br> -->
-          <h2><a>Analyze Single Location:</a></h2>
-          <strong>Input address below:&nbsp;</strong><br>
+          <e><a>Single Location</a></e>
+          <f><strong>Input address below:&nbsp;</strong><br>
           <input class="input" type='text' id="location" value='5455 S blackstone ave'><br>
-          <strong>Radius</strong><br>
+          <strong>Neighborhood radius</strong><br>
           <input type="text" id="radius" value='1'>&nbsp;mile<br>
-          <strong>Filter</strong><br>
+          <br><strong>Filter</strong><br>
           Crime/Safety: Yes&nbsp;<input type='radio' name='crime' value=True> No&nbsp;<input type='radio' name='crime' value=False><br>
           Noise: Yes&nbsp;<input type='radio' name='noise' value=True> No&nbsp;<input type='radio' name='noise' value=False><br>
           Convenience: Yes&nbsp;<input type='radio' name='convenience' value=True> No&nbsp;<input type='radio' name='convenience' value=False><br>
-          <button onclick="get_safety(this)" class="btn btn-info" style='margin-center: 120px'>Submit</button>
-        </div>
-        <div class="multiple-panel">
+        <br><button onclick="get_safety(this)" class="btn btn-info">Analyze</button><br>
+        </span></div></f>
+        <br><div class="multiple-panel">
 
-          <h2><a>Multiple Location Comparison</a></h2><br>
+          <e><a>Multi Locations</a></e><br>
+          <f><strong>Input addresses below:&nbsp;</strong><br>
           <div id="locations">
             <input type="text" class="location" value='5455 S blackstone ave'>
             <input type="text" class="location" value='1001 S. South State Street, Chicago, IL 60615'>
           </div>
-          <button onclick="add_city_input()" class="btn">Add more address</button><br>
+          <button onclick="add_city_input()" class="btn">Add more</button><br>
+          <br><strong>Neighborhood radius</strong><br>
             <input type="text" id="radius2" value='1'>&nbsp;mile<br>
-          <button onclick="get_rank(this)" class="btn btn-info" style="margin-center: 120px">Search</button><br>
-          Crime weight: <br><input id="crime-weight" type="text" data-slider-max="3" data-slider-step="1"><br>
-          Noise weight: <br><input id="noise-weight" type="text" data-slider-max="3" data-slider-step="1"><br>
-          Convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="3" data-slider-step="1"><br>
+          <br>Crime weight: <br><input id="crime-weight" type="text" data-slider-max="3" data-slider-step="1" maxlength="50px">&nbsp;&nbsp;<br>
+          Noise weight: <br><input id="noise-weight" type="text" data-slider-max="3" data-slider-step="1">&nbsp;&nbsp;<br>
+          Convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="3" data-slider-step="1"></f><br>
+          <br><button onclick="get_rank(this)" class="btn btn-info">Compare</button><br>
         </div>
       </div>
-      <div class="right graph-container">
-        <div class="single-graph">
-          <div id="single-graph" style="width: 600px; height: 400px;">
+
+      <span style="padding: 10px"></span><div class="right graph-container"></span>
+        <e>Summary</e>
+        <div style="max-width:900px; word-wrap:break-word;"><d>Within the 1 mile radius, this location's neighborhood is safe, convenient, with moderate noise.</d>
+        </div><div class="single-graph">
+        <br><br><e>I. Crime</e>
+          <br><d>This neighborhood's safety is below Chicago average.</d><br>
+          <br><div style="max-width:900px; word-wrap:break-word;">
+            <d>Last year, its crime rate is 163 percent above Chicago average (in terms of number of crime cases by neighborhood area).</d></div><br>
+          <div id="single-graph" style="width: 900px; height: 600px;">
           </div>
-          <div id="single-pie-graph" style="width: 600px; height: 400px;">
+          <br><br>
+          <div style="max-width:900px; word-wrap:break-word;"><d>
+            ∙ Violence is the prevalent crime type in this neighborhood.</d></div><br>
+          <div id="single-pie-graph" style="width: 900px; height: 600px;">
           </div>
-          <div id="single-radio-graph" style="width: 600px; height: 400px;">
+          <br><br><e>II. Noise</e>
+          <div style="max-width:900px; word-wrap:break-word;"><d>
+          This neighborhood's noise level is moderate with locality being the main noise source.</d></div><br>
+          <div id="single-radio-graph" style="width: 900px; height: 600px;">
           </div>
         </div>
         <div class="multi-graph">
-          <div id="multi-graph" style="width: 600px; height: 400px;">
+          <br><br><e>III. Convenience</e>
+          <div style="max-width:900px; word-wrap:break-word;"><d>The travel time to 1155 E 60th St, Chicago, IL 60637 is 7 minutes by bike. If that is a workplace, You would spent about 5.8 hours on commute each month.
+          </d></div>
+          <br><div style="max-width:900px; word-wrap:break-word;"><d>
+            ∙ The driving time to downtown is 16 minutes.
+          </d></div>
+          <div style="max-width:900px; word-wrap:break-word;"><d>
+            ∙ The driving time to airport is 29 minutes (ORD), 21 minutes (MDW).
+  <h1>Maps</h1>
+
+  <div id="map" style="width:900px;height:900px;background:white"></div>
+
+  <script>
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      var map;
+      var infoWindow;
+      var service;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 41.7964444, lng: -87.5921434},
+          zoom: 15,
+          styles: [{
+            stylers: [{ visibility: 'simplified' }]
+          }, {
+            elementType: 'labels',
+            stylers: [{ visibility: 'off' }]
+          }]
+        });
+
+        infoWindow = new google.maps.InfoWindow();
+        service = new google.maps.places.PlacesService(map);
+
+        // The idle event is a debounced event, so we can query & listen without
+        // throwing too many requests at the server.
+        map.addListener('idle', performSearch);
+      }
+
+      function performSearch() {
+        var request = {
+          bounds: map.getBounds(),
+          keyword: 'restaurant'
+        };
+        service.radarSearch(request, callback);
+      }
+
+      function callback(results, status) {
+        if (status !== google.maps.places.PlacesServiceStatus.OK) {
+          console.error(status);
+          return;
+        }
+        for (var i = 0, result; result = results[i]; i++) {
+          addMarker(result);
+        }
+      }
+
+      function addMarker(place) {
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location,
+          icon: {
+            url: 'https://developers.google.com/maps/documentation/javascript/images/circle.png',
+            anchor: new google.maps.Point(10, 10),
+            scaledSize: new google.maps.Size(10, 17)
+          }
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          service.getDetails(place, function(result, status) {
+            if (status !== google.maps.places.PlacesServiceStatus.OK) {
+              console.error(status);
+              return;
+            }
+            infoWindow.setContent(result.name);
+            infoWindow.open(map, marker);
+          });
+        });
+      }
+  </script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsFC0S-FSVg75hXh-GaATcjkN8uG_zkdM&callback=initMap&libraries=places,visualization"></script>
+  <!--
+  To use this code on your website, get a free API key from Google.
+  Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
+  -->
+          </d></div>
+          <br>
+          <br><br><e>Comparison Summary</e><br>
+          <div id="multi-graph" style="width: 900px; height: 600px;">
           </div>
         </div>
         <div class="table">
