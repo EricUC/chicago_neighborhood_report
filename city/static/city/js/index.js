@@ -358,7 +358,8 @@ var init = function() {
       right: '4%',
       bottom: '3%',
       containLabel: true
-    },
+
+    }, //#@2
     xAxis : [
       {
         type : 'category',
@@ -494,7 +495,7 @@ var init = function() {
   var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
   singelRadioOption = {
       title: {
-          text: 'noise graph',
+          text: 'Noise Graph',
           left: 'center',
           top:-5,
 
