@@ -13,7 +13,8 @@
     <script src="/static/city/js/index.js"></script>
   </head>
   <body onload="init()">
-    <nav class="navbar navbar-default">
+
+    <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -36,31 +37,58 @@
         </div>
       </div>
     </nav>
+
     <h1>Chicago Neighborhood Report</h1>
     <hr>
+    <div class="container-fluid text-left">
+      <div class="row content">
+        <div class="col-sm-2 sidenav">
+          <h2><a>Single Location Analysis:</a></h2>
+            <script>
+            var get_safety = function(dom) {
+              console.log(wx=dom)
+              data = {
+                'location': $('#location')[0].value,
+                'radius': $('#radius')[0].value,
+              };
+              console.log(data);
+              $.ajax({
+                url: '/city/rank/',
+                data: JSON.stringify(data),
+                type: 'post',
+                url: '/city/safety',
+                data: data,
+                type: 'get',
+                success: function(response) {
+                  document.getElementById("result2").innerText = JSON.stringify(response)
+                  document.getElementById("result").innerText = JSON.stringify(response)
+                }
+              });
+            }
+          </script>
     <div class="body">
       <div class="control-panel">
         <div class="single-panel">
-          <h4>Single location Analysis</h4><br>
+          <!-- <h4>Single location Analysis</h4><br> -->
           <strong>Your prefered location</strong><br>
           <input class="input" type='text' id="location" value='5455 S blackstone ave'><br>
           <strong>Range</strong><br>
-          <input type="text" id="radius" value='1.5'>mile<br>
+          <input type="text" id="radius" value='1'>mile<br>
           <strong>Analysis Parts</strong><br>
           Crime/Safety: Yes<input type='radio' name='crime' value=True> No<input type='radio' name='crime' value=False><br>
           Noise: Yes<input type='radio' name='noise' value=True> No<input type='radio' name='noise' value=False><br>
           Convenience: Yes<input type='radio' name='convenience' value=True> No<input type='radio' name='convenience' value=False><br>
-          <button onclick="get_safety(this)" class="btn btn-info" style='margin-left: 120px'>Search</button>
+          <button onclick="get_safety(this)" class="btn btn-info" style='margin-center: 120px'>Search</button>
         </div>
         <div class="multiple-panel">
-          <h4>Multiple Locations Comparison</h4><br>
+          <h2><a>Multiple Location Comparison</a></h2><br>
           <div id="locations">
             <input type="text" class="location" value='5455 S blackstone ave'>
             <input type="text" class="location" value='1001 S. South State Street, Chicago, IL 60615'>
           </div>
           <button onclick="add_city_input()" class="btn">Add a new city</button><br>
-            <input type="text" id="radius2" value='1.5'>mile<br>
-          <button onclick="get_rank(this)" class="btn btn-info" style="margin-left: 120px">Search</button><br>
+            <input type="text" id="radius2" value='1'>mile<br>
+          <button onclick="get_rank(this)" class="btn btn-info" style="margin-center: 120px">Search</button><br>
           crime weight: <br><input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
           noise weight: <br><input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
           convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
