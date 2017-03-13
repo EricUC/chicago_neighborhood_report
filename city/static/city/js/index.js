@@ -1,3 +1,22 @@
+// 以下是需要做出的功能改动：
+//  1. 比较模式的总评table:
+//    1.1 需要把四个表头文字改成：address, safety, noise level, convenience,
+//        并且去掉“／”和权重数字 ok
+//    1.2 更改各项分值的计算方法为百分制：
+//      1.2.1 safety: 以 crime city total average 为中间值，0犯罪为100分，
+//            city total average的两倍为一百分，由此计算area total的得分。 ok, 2倍的时候应该为0分吧
+//      1.2.2 noise level: 以100分为100分， 50分为零分，由此计算noise core的得分。 ok
+//      1.2.3 convenience: 不太清楚这个怎么算的，但是最大值为100分，最大值的 2/3 为50分，
+//                         最大值的1/3或以下为零分。
+//    1.3 在文本"Summary of the several locations of around 1 miles"的位置(表格上方)，
+//        写一个自动生成文本的总结句, 在以下文本中嵌入总分最高的地址。
+//        “all criteria considered, (哪个地址) has the best overall neighborhood.” ok
+//  2. Crime graph
+//    2.1 去掉分项条形图内部的间隙（即不同颜色、紧挨着的条形之间的间隙） ok
+//    2.2 加上自动生成文本的总结句: "(哪个地址)'s neighborhood is the safest." 以及
+//        "(哪个地址) has the lowest residential crime rate." ok
+//  3. 比较模式需要加上convenience横条形图 ok
+//  4. 其他之前提过的改动。
 var get_data_fake = function(data) {
   return {
     'area total': 2053,
@@ -44,7 +63,7 @@ var get_safety = function(dom) {
       // set the single-summary-crime-rate span value
       doms = $(".single-summary-crime-rate")
       for (var i=0; i< doms.length; i++) {
-        doms[i].innerText = parseInt((response['area total'] - response['city total average']) / response['city total average'] * 100) + '%'
+        doms[i].innerText = Math.abs(parseInt((response['area total'] - response['city total average']) / response['city total average'] * 100))
       }
       // set the single-summary-crime-type
       doms = $(".single-summary-crime-type")
@@ -63,10 +82,11 @@ var get_safety = function(dom) {
       }
 
       // set the single-summary-noise-below
+      // 这改了自动生成文本的条件 80分以上high, 70分以下low, 之间moderate
       doms = $(".single-summary-noise-below")
-      if (response['noise']['score'] > response['noise']['locale']) {
+      if (response['noise']['score'] > 80) {
         innerText = "high"
-      } else if (response['noise']['score'] < response['noise']['locale']) {
+      } else if (response['noise']['score'] < 70) {
         innerText = "low"
       } else {
         innerText = "moderate"
@@ -90,17 +110,30 @@ var get_safety = function(dom) {
         doms[i].innerText = max_type;
       }
 
+      // set the single-summary-crime-safe-not-safe
+      doms = $('.single-summary-crime-safe-not-safe')
+      if (response['area total'] > response['city total average']) {
+        innerText = 'not save'
+      } else {
+        innerText = 'save'
+      }
+      for (var i=0; i<doms.length; i++ ) {
+        doms[i].innerText = innerText
+      }
+
       // redraw the convenient graph
+      console.log("create the convenient graph")
       var convenientChart = echarts.init(document.getElementById('single-convenient-graph'));
       var convenientData = [
         response['life_result']['restaurant'],
         response['life_result']['shop'],
         response['life_result']['transport'],
       ]
+      console.log(convenientData)
       ConvenientOption = {
         title: {
-            text: 'The result of googlemap',
-            subtext: 'if the enumber is more than 100, it means 100+'
+            text: 'Nearby Venues',
+            subtext: '(number of nearby places by type)'
         },
         tooltip: {
             trigger: 'axis',
@@ -112,25 +145,25 @@ var get_safety = function(dom) {
             data: ['Convenient']
         },
         grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
         },
         xAxis: {
-            type: 'value',
-            boundaryGap: [0, 0.01]
+          type: 'value',
+          boundaryGap: [0, 0.01]
         },
         yAxis: {
-            type: 'category',
-            data: ['restaurant', 'shop', 'transport'],
+          type: 'category',
+          data: ['Restaurant', 'Shop', 'Transport'],
         },
         series: [
-            {
-                name: 'Convenient',
-                type: 'bar',
-                data: convenientData,
-            }
+          {
+            name: 'Convenient',
+            type: 'bar',
+            data: convenientData,
+          }
         ]
       };
       convenientChart.setOption(ConvenientOption);
@@ -177,6 +210,7 @@ var get_safety = function(dom) {
           {
             name:'city',
             type:'bar',
+            barGap: '0%',
             data: [
               response['city total average'],
               response['city violence average'],
@@ -209,7 +243,7 @@ var get_safety = function(dom) {
         visualMap: {
           show: false,
           min: 80,
-          max: 600,
+          max: 2000,
           inRange: {
               colorLightness: [0, 1]
           }
@@ -245,10 +279,10 @@ var get_safety = function(dom) {
             },
             itemStyle: {
               normal: {
-                  color: '#c23531',
-                  shadowBlur: 200,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
+                shadowBlur: 200,
+                color: "#c23531",
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              },
             },
 
             animationType: 'scale',
@@ -261,7 +295,7 @@ var get_safety = function(dom) {
       };
       singlePieChart.setOption(singlePieOption);
 
-      // redraw the radio graph 
+      // redraw the radio graph
       var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
       noise_values = [
         response['noise']['score'],
@@ -324,7 +358,6 @@ var get_rank = function(dom) {
     contentType: "application/json; charset=utf-8",
     type: 'post',
     success: function(response) {
-
       $('#multi-location-radius')[0].innerText = data['radius'];
       $('.graph').hide();
       $('.multi-graph').show();
@@ -341,7 +374,7 @@ var get_rank = function(dom) {
           results[i]['area residential'],
           results[i]['area property'],
         ]
-        var tmp = {'name': locations[i], 'type': 'bar', data: data_list}
+        var tmp = {'name': locations[i], 'type': 'bar', data: data_list, 'barGap': '0%'}
         series.push(tmp)
       }
       multiOption = {
@@ -374,12 +407,22 @@ var get_rank = function(dom) {
       var crimeweight = parseInt($("#crime-weight")[0].value);
       var noiseweight = parseInt($("#noise-weight")[0].value);
       var convenientweight = parseInt($("#convenient-weight")[0].value);
+
       // calculate the result
+      // redraw the table
+      var get_crime_score = function (local, city) {
+        return (2 * city - local) / 2 * city
+      }
+      var get_noise_score = function (score) {
+        return 2 * score - 100
+      }
       results_for_table = [];
       for (var i=0; i<locations.length; i++) {
         data_dict = {
-          'area total': results[i]['area total'] * crimeweight / 100,
-          'noise': results[i]['noise']['score'] * noiseweight / 100,
+          // 'area total': results[i]['area total'] * crimeweight / 100,
+          'area total': get_crime_score(results[i]['area total'], results[i]['city total average']),
+          // 'noise': results[i]['noise']['score'] * noiseweight / 100,
+          'noise': get_noise_score(results[i]['noise']['score']),
           'transport': results[i]['life_result']['transport'] * convenientweight / 100,
           'name': locations[i]
         };
@@ -389,14 +432,42 @@ var get_rank = function(dom) {
       $("#multi-table").bootstrapTable('removeAll');
       $("#multi-table").bootstrapTable('refreshOptions', {
         columns: [
-          {field: 'name', title: 'name', sortable: true},
-          {field: 'area total', title: 'crime/' + crimeweight, sortable: true},
-          {field: 'noise', title: 'noise/' + noiseweight, sortable: true},
-          {field: 'transport', title: 'convenient/' + convenientweight, sortable: true},
+          {field: 'name', title: 'address', sortable: true},
+          {field: 'area total', title: 'safety', sortable: true},
+          {field: 'noise', title: 'noise level', sortable: true},
+          {field: 'transport', title: 'convenient', sortable: true},
           {field: 'score', title: 'total', sortable: true},
         ],
         data: results_for_table,
       })
+
+      // set the multi-summary-best-place
+      doms = $(".multi-summary-best-place")
+      var max_score = results_for_table[0]['score']
+      var best_location = results_for_table[0]['name']
+      for (var i=0; i<results_for_table.length; i++){
+        if (results_for_table[i]['score'] > max_score ) {
+          max_score = results_for_table[i]['score'];
+          best_location = results_for_table[i]['name']
+        }
+      }
+      for (var i=0; i<doms.length; i++) {
+        doms[i].innerText = best_location;
+      }
+
+      // set the multi-summary-safe-place
+      doms = $(".multi-summary-safe-place")
+      var lowerest_crime = results_for_table[0]["area total"];
+      var lowerest_place = results_for_table[0]["name"];
+      for (var i=0; i< doms.length; i++ ) {
+        if (results_for_table[0]["area total"] < lowerest_crime) {
+          lowerest_crime = results_for_table[0]["area total"]
+          lowerest_place = results_for_table[0]["name"]
+        }
+      }
+      for (var i=0;i<doms.length; i++) {
+        doms[i].innerText = lowerest_place
+      }
 
       // redraw the radar graph
 
@@ -449,6 +520,80 @@ var get_rank = function(dom) {
         }]
       };
       multiNoiseChart.setOption(MultiRadarOption)
+
+      // redraw the convenient graph
+      var multiConvenientChart = echarts.init(document.getElementById('multi-convenient-graph'))
+      var transport_data_list = []
+      var shop_data_list = []
+      var restaurant_data_list = []
+      for (var i=0; i< locations.length; i++) {
+        transport_data_list.push(results[i]['life_result']['transport']);
+        shop_data_list.push(results[i]['life_result']['shop'])
+        restaurant_data_list.push(results[i]['life_result']['restaurant'])
+      }
+      multiConvenientOption = {
+		    tooltip : {
+          trigger: 'axis',
+          axisPointer : {  // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+		    },
+		    legend: {
+		        data: ['transport', 'shop','restaurant']
+		    },
+		    grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '3%',
+		        containLabel: true
+		    },
+		    xAxis:  {
+		        type: 'value'
+		    },
+		    yAxis: {
+		        type: 'category',
+		        data: locations
+		    },
+		    series: [
+          {
+            name: 'transport',
+            type: 'bar',
+            stack: '总量',
+            label: {
+              normal: {
+                show: true,
+                position: 'insideRight'
+              }
+            },
+            data: transport_data_list,
+          },
+          {
+            name: 'shop',
+            type: 'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data: shop_data_list,
+          },
+          {
+            name: 'restaurant',
+            type: 'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data: restaurant_data_list,
+          },
+		    ]
+		  };
+      multiConvenientChart.setOption(multiConvenientOption);
     }
   });
 }
