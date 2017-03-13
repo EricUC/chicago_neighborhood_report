@@ -1,8 +1,23 @@
+<!-- 以下是需要做出的页面改动 -->
+<!-- 1.左侧搜索栏 -->
+<!--  1.1 背景颜色改成浅灰色: #D5D5D5 ok -->
+<!--  1.2 去掉或隐藏choose criteria中的三个yes/no 选项 ok -->
+<!--  1.3 crime weight拖动条不显示数值-- ok >
+<!-- 2. 图表 -->
+<!--  2.1 crime pie把白颜色的部分换成某种红色 ok-->
+<!--  -->
+<!--  2.2 去掉crime graph的间隙 ok-->
+<!--  2.3 所有的单词首字母大写 不确定-->
+<!-- 3. 自动生成语句 -->
+<!--  3.1 single location 总结句: "This area is (safe/not safe), (convenient/inconvenient), with (low/moderate/high) noise level.-->
+<!--    3.1.2 评判convenience算法用类似比较模式中的convenience score来判断 -->
+<!--  3.2 convenience 总结句: "This neighbohood is convenient for : (dining out, and/or shopping, and/or public transit.)" -->
+<!-- 4. 右侧结果栏左侧加一些 margin 这个是padding -->
+<!-- 5. 其他之前提到的改动。 -->
 <!DOCTYPE html>
-<!-- {% load static %} -->
-<html lang="en">
+<html>
   <head>
-    <title>rate ma hooz</title>
+    <title>Chicago Neighborhood Report</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <script src="/static/city/js/jquery-3.1.0.js"></script>
     <link rel="stylesheet" href="/static/bootstrap3/css/bootstrap.min.css">
@@ -10,236 +25,84 @@
     <link href="/static/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
     <link rel="stylesheet/less" type="text/css" href="/static/city/index.less">
     <script src="/static/js/less.min.js"></script>
-    <script src="/static/js/echarts.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
     <script src="/static/city/js/index.js"></script>
     <link href='//fonts.googleapis.com/css?family=Raleway Dots' rel='stylesheet'>
     <link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
     <link href='//fonts.googleapis.com/css?family=Alfa Slab One' rel='stylesheet'>
-    <style>
-    c {
-        font-family: 'Alfa Slab One';font-size: 50px;
-    }
-    d {
-        font-family: 'Raleway Dots';font-size: 28px;
-    }
-    e {
-        font-family: 'Raleway';font-size: 28px;
-    }
-    f {
-      font-family: 'Raleway';font-size: 16px;
-    }
 
-
-    </style>
   </head>
   <body onload="init()">
-
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <!-- <a class="navbar-brand" href="#">Han-ji-ji presents</a> -->
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href=http://assets.itsnicethat.com/system/files/112013/5285f8085c3e3c49b9000347/images_slice_large/05867074.jpg?1438258500>About</a></li>
-            <li><a href=https://68.media.tumblr.com/a5a8de55e4b694da3a23b71b3212c732/tumblr_oida28mn2P1qaruxco1_1280.jpg>FAQs</a></li>
-            <li><a href=http://www.penccil.com/files/U_48_238918971351_68730_102845.jpg>Contact</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href=https://s-media-cache-ak0.pinimg.com/originals/08/62/8a/08628a9c651d8ddf5f86804fabd05774.jpg>
-              <span class="glyphicon glyphicon-hand-right"></span>&nbsp;&nbsp;Fun&nbsp;with&nbsp;hán-jī-jī</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <c>&nbsp;Chicago Neighborhood Report</c>
+    <h1>Chicago Neighborhood Report</h1>
     <hr>
-    <div class="container-fluid text-left">
-      <div class="row content">
-        <div class="col-sm-2 sidenav">
-
-            <script>
-            var get_safety = function(dom) {
-              console.log(wx=dom)
-              data = {
-                'location': $('#location')[0].value,
-                'radius': $('#radius')[0].value,
-              };
-              console.log(data);
-              $.ajax({
-                url: '/city/rank/',
-                data: JSON.stringify(data),
-                type: 'post',
-                url: '/city/safety',
-                data: data,
-                type: 'get',
-                success: function(response) {
-                  document.getElementById("result2").innerText = JSON.stringify(response)
-                  document.getElementById("result").innerText = JSON.stringify(response)
-                }
-              });
-            }
-          </script>
-
     <div class="body">
       <div class="control-panel">
-        <div class="single-panel"><span padding-right='20px'>
-          <!-- <h4>Single location Analysis</h4><br> -->
-          <e><a>Single Location</a></e>
-          <f><strong>Input address below:&nbsp;</strong><br>
-          <input class="input" type='text' id="location" value='5455 S blackstone ave'><br>
-          <strong>Neighborhood radius</strong><br>
-          <input type="text" id="radius" value='1'>&nbsp;mile<br>
-          <br><strong>Filter</strong><br>
-          Crime/Safety: Yes&nbsp;<input type='radio' name='crime' value=True> No&nbsp;<input type='radio' name='crime' value=False><br>
-          Noise: Yes&nbsp;<input type='radio' name='noise' value=True> No&nbsp;<input type='radio' name='noise' value=False><br>
-          Convenience: Yes&nbsp;<input type='radio' name='convenience' value=True> No&nbsp;<input type='radio' name='convenience' value=False><br>
-        <br><button onclick="get_safety(this)" class="btn btn-info">Analyze</button><br>
-        </span></div></f>
-        <br><div class="multiple-panel">
-
-          <e><a>Multi Locations</a></e><br>
-          <f><strong>Input addresses below:&nbsp;</strong><br>
+        <div class="single-panel">
+          <h4 class="title">Single location</h4><br>
+          <label>Input an address:</label><br>
+          <input class="input form-control" type='text' id="location" value='5455 S blackstone ave'><br>
+          <label>Radius(mile)</label><br>
+          <input class="input form-control" type="text" id="radius" value='1'><br>
+          <strong>Choose criteria</strong><br>
+          Crime/Safety: <br>
+          Noise: <br>
+          Convenience: <br>
+          <button onclick="get_safety(this)" class="btn btn-info" style='margin-left: 120px'>Search</button>
+        </div>
+        <div class="multiple-panel">
+          <h4 class="title">Multi-Location</h4><br>
           <div id="locations">
-            <input type="text" class="location" value='5455 S blackstone ave'>
-            <input type="text" class="location" value='1001 S. South State Street, Chicago, IL 60615'>
+            <input type="text" class="location input form-control" value='5455 S blackstone ave'>
+            <input type="text" class="location input form-control" value='1001 S. South State Street, Chicago, IL 60615'>
           </div>
-          <button onclick="add_city_input()" class="btn">Add more</button><br>
-          <br><strong>Neighborhood radius</strong><br>
-            <input type="text" id="radius2" value='1'>&nbsp;mile<br>
-          <br>Crime weight: <br><input id="crime-weight" type="text" data-slider-max="3" data-slider-step="1" maxlength="50px">&nbsp;&nbsp;<br>
-          Noise weight: <br><input id="noise-weight" type="text" data-slider-max="3" data-slider-step="1">&nbsp;&nbsp;<br>
-          Convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="3" data-slider-step="1"></f><br>
-          <br><button onclick="get_rank(this)" class="btn btn-info">Compare</button><br>
+          <button onclick="add_city_input()" class="btn">Add more address(es)</button><br>
+            <label>Radius(mile)</label>
+            <input type="text" class="form-control" id="radius2" value='1'><br>
+          <button onclick="get_rank(this)" class="btn btn-info" style="margin-left: 120px">Search</button><br>
+          Crime weight: <br><input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1" data-slider-tooltip="hide"><br>
+          Noise weight: <br><input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          Convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
         </div>
       </div>
-
-      <span style="padding: 10px"></span><div class="right graph-container"></span>
-        <e>Summary</e>
-        <div style="max-width:900px; word-wrap:break-word;"><d>Within the 1 mile radius, this location's neighborhood is safe, convenient, with moderate noise.</d>
-        </div><div class="single-graph">
-        <br><br><e>I. Crime</e>
-          <br><d>This neighborhood's safety is below Chicago average.</d><br>
-          <br><div style="max-width:900px; word-wrap:break-word;">
-            <d>Last year, its crime rate is 163 percent above Chicago average (in terms of number of crime cases by neighborhood area).</d></div><br>
-          <div id="single-graph" style="width: 900px; height: 600px;">
-          </div>
-          <br><br>
-          <div style="max-width:900px; word-wrap:break-word;"><d>
-            ∙ Violence is the prevalent crime type in this neighborhood.</d></div><br>
-          <div id="single-pie-graph" style="width: 900px; height: 600px;">
-          </div>
-          <br><br><e>II. Noise</e>
-          <div style="max-width:900px; word-wrap:break-word;"><d>
-          This neighborhood's noise level is moderate with locality being the main noise source.</d></div><br>
-          <div id="single-radio-graph" style="width: 900px; height: 600px;">
-          </div>
+      <div class="right graph-container">
+        <div class="no-graph graph">
+          <h1>Welcome! Please search on the left.</h1>
         </div>
-        <div class="multi-graph">
-          <br><br><e>III. Convenience</e>
-          <div style="max-width:900px; word-wrap:break-word;"><d>The travel time to 1155 E 60th St, Chicago, IL 60637 is 7 minutes by bike. If that is a workplace, You would spent about 5.8 hours on commute each month.
-          </d></div>
-          <br><div style="max-width:900px; word-wrap:break-word;"><d>
-            ∙ The driving time to downtown is 16 minutes.
-          </d></div>
-          <div style="max-width:900px; word-wrap:break-word;"><d>
-            ∙ The driving time to airport is 29 minutes (ORD), 21 minutes (MDW).
-  <h1>Maps</h1>
-
-  <div id="map" style="width:900px;height:900px;background:white"></div>
-
-  <script>
-      // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-      var map;
-      var infoWindow;
-      var service;
-
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 41.7964444, lng: -87.5921434},
-          zoom: 15,
-          styles: [{
-            stylers: [{ visibility: 'simplified' }]
-          }, {
-            elementType: 'labels',
-            stylers: [{ visibility: 'off' }]
-          }]
-        });
-
-        infoWindow = new google.maps.InfoWindow();
-        service = new google.maps.places.PlacesService(map);
-
-        // The idle event is a debounced event, so we can query & listen without
-        // throwing too many requests at the server.
-        map.addListener('idle', performSearch);
-      }
-
-      function performSearch() {
-        var request = {
-          bounds: map.getBounds(),
-          keyword: 'restaurant'
-        };
-        service.radarSearch(request, callback);
-      }
-
-      function callback(results, status) {
-        if (status !== google.maps.places.PlacesServiceStatus.OK) {
-          console.error(status);
-          return;
-        }
-        for (var i = 0, result; result = results[i]; i++) {
-          addMarker(result);
-        }
-      }
-
-      function addMarker(place) {
-        var marker = new google.maps.Marker({
-          map: map,
-          position: place.geometry.location,
-          icon: {
-            url: 'https://developers.google.com/maps/documentation/javascript/images/circle.png',
-            anchor: new google.maps.Point(10, 10),
-            scaledSize: new google.maps.Size(10, 17)
-          }
-        });
-
-        google.maps.event.addListener(marker, 'click', function() {
-          service.getDetails(place, function(result, status) {
-            if (status !== google.maps.places.PlacesServiceStatus.OK) {
-              console.error(status);
-              return;
-            }
-            infoWindow.setContent(result.name);
-            infoWindow.open(map, marker);
-          });
-        });
-      }
-  </script>
-
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsFC0S-FSVg75hXh-GaATcjkN8uG_zkdM&callback=initMap&libraries=places,visualization"></script>
-  <!--
-  To use this code on your website, get a free API key from Google.
-  Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
-  -->
-          </d></div>
+        <div class="single-graph graph" style="display: none">
+          <p class="summary">This area is <span class="single-summary-crime-safe-not-safe">(safe/not safe)</span>,
+            (convenient/inconvenient), with (low/moderate/high) noise level<p>
           <br>
-          <br><br><e>Comparison Summary</e><br>
-          <div id="multi-graph" style="width: 900px; height: 600px;">
+          <p class="summary">I. Crime</p>
+          <p class="summary">This neighborhood's safety is <span class="single-summary-crime-below"></span> Chicago average.</p><br>
+          <p class="summary">Last year, its crime rate is <span class="single-summary-crime-rate"></span> percent <span class="single-summary-crime-below"></span> Chicago average, in terms of number of crime cases by neighborhood area.</p>
+          <div id="single-graph" style="width: 600px; height: 400px;">
+          </div>
+          <p class="summary"><span class="transform single-summary-crime-type"></span> is the prevalent crime type in this neighborhood.</p>
+          <div id="single-pie-graph" style="width: 600px; height: 400px;">
+          </div>
+          <p class="summary">II. Noise</p>
+          <p class="summary">This neighborhood's noise level is <span class="single-summary-noise-below"></span> with <span class="single-summary-noise-type"></span> being the main noise source</p>
+          <div id="single-radio-graph" style="width: 600px; height: 400px;">
+          </div>
+          <p class="summary">III. Convenience</p>
+          <div id="single-convenient-graph" style="width: 600px; height: 400px;">
           </div>
         </div>
-        <div class="table">
+        <div class="multi-graph graph" style="display: none">
+          <h4>Summary of the several locations of around <span id="multi-location-radius"></span> miles</h4>
+          <p class="summary">all criteria considered, <span class="multi-summary-best-place"></span> has the best overall neighborhood.</p>
           <table data-toggle="table" id="multi-table">
           </table>
+          <p class="summary"><span class="multi-summary-safe-place"></span>'s neighborhood is the safest. <span class="multi-summary-safe-place"></span> has the lowest residential crime rate.</p>
+          <div id="multi-graph" style="width: 600px; height: 400px;">
+          </div>
+          <!-- 这里需要一个自动生成文本的function, 比较用户所给的地址中，哪个最安静 -->
+          <h4>(哪个地址) has the lowest noise-level.</h4>
+          <div id="multi-noise-graph" style="width: 600px; height: 400px;">
+          </div>
+          <h4>The convenient Graph</h4>
+          <div id="multi-convenient-graph" style="width: 600px; height: 400px;">
+          </div>
         </div>
       </div>
     </div>

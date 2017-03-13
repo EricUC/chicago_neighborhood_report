@@ -16,6 +16,10 @@ var get_safety = function(dom) {
     'location': $('#location')[0].value,
     'radius': $('#radius')[0].value,
   };
+  single_location_radius_doms = $('.single-location-safety')
+  for (var i=0; i < single_location_radius_doms.length; i++ ) {
+    single_location_radius_doms[i].innerText = data['radius'];
+  }
   console.log(data);
   response = get_data_fake(data)
 
@@ -24,6 +28,112 @@ var get_safety = function(dom) {
     data: data,
     type: 'get',
     success: function(response) {
+      $('.graph').hide();
+      $('.single-graph').show();
+      // set the single-summary-crime-below span value
+      doms = $(".single-summary-crime-below")
+      for (var i=0; i < doms.length; i++ ) {
+        if (response['area total'] > response['city total average'] ) {
+          doms[i].innerText = 'above'
+        } else if (response['area total'] < response['city total average']) {
+          doms[i].innerText = 'below'
+        } else {
+          doms[i].innerText = 'on par with'
+        }
+      }
+      // set the single-summary-crime-rate span value
+      doms = $(".single-summary-crime-rate")
+      for (var i=0; i< doms.length; i++) {
+        doms[i].innerText = parseInt((response['area total'] - response['city total average']) / response['city total average'] * 100) + '%'
+      }
+      // set the single-summary-crime-type
+      doms = $(".single-summary-crime-type")
+      var max_type = "violence";
+      var max_value = response['area violence'];
+      if (response['area residential'] > max_value) {
+        max_type = 'residential';
+        max_value = response['area residential'];
+      }
+      if (response['area property'] > max_value) {
+        max_type = 'property';
+        max_value = response['area property'];
+      }
+      for (var i=0; i< doms.length; i++) {
+        doms[i].innerText = max_type;
+      }
+
+      // set the single-summary-noise-below
+      doms = $(".single-summary-noise-below")
+      if (response['noise']['score'] > response['noise']['locale']) {
+        innerText = "high"
+      } else if (response['noise']['score'] < response['noise']['locale']) {
+        innerText = "low"
+      } else {
+        innerText = "moderate"
+      }
+      for (var i=0; i< doms.length; i++) {
+        doms[i].innerText = innerText
+      }
+
+      // set the single-summary-noise-type
+      doms = $(".single-summary-noise-type")
+      var max_type = "airport";
+      var max_value = response['noise']['airport'];
+      if (response['noise']['locale'] > max_value) {
+        max_type = "locale";
+        max_value = response["noise"]["locale"];
+      } else if (response['noise']['traffic'] > max_value) {
+        max_type = "traffic";
+        max_value = response["noise"]["traffic"];
+      }
+      for (var i=0; i< doms.length; i++) {
+        doms[i].innerText = max_type;
+      }
+
+      // redraw the convenient graph
+      var convenientChart = echarts.init(document.getElementById('single-convenient-graph'));
+      var convenientData = [
+        response['life_result']['restaurant'],
+        response['life_result']['shop'],
+        response['life_result']['transport'],
+      ]
+      ConvenientOption = {
+        title: {
+            text: 'The result of googlemap',
+            subtext: 'if the enumber is more than 100, it means 100+'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['Convenient']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            type: 'category',
+            data: ['restaurant', 'shop', 'transport'],
+        },
+        series: [
+            {
+                name: 'Convenient',
+                type: 'bar',
+                data: convenientData,
+            }
+        ]
+      };
+      convenientChart.setOption(ConvenientOption);
       //  redraw the column graph
       var singleChart = echarts.init(document.getElementById('single-graph'));
       singleOption = {
@@ -34,7 +144,7 @@ var get_safety = function(dom) {
           }
         },
         legend: {
-          data:['area','total']
+          data:['area','city']
         },
         grid: {
           left: '3%',
@@ -80,7 +190,7 @@ var get_safety = function(dom) {
       // redraw the pie graph
       var singlePieChart = echarts.init(document.getElementById('single-pie-graph'));
       singlePieOption = {
-        backgroundColor: '#2c343c',
+        backgroundColor: '#fff',
 
         title: {
           text: 'Crime Pie',
@@ -119,14 +229,14 @@ var get_safety = function(dom) {
             label: {
               normal: {
                   textStyle: {
-                      color: 'rgba(255, 255, 255, 0.3)'
+                      color: 'rgba(0, 0, 0, 0.3)'
                   }
               }
             },
             labelLine: {
               normal: {
                   lineStyle: {
-                      color: 'rgba(255, 255, 255, 0.3)'
+                      color: 'rgba(0, 0, 0, 0.3)'
                   },
                   smooth: 0.2,
                   length: 10,
@@ -151,7 +261,7 @@ var get_safety = function(dom) {
       };
       singlePieChart.setOption(singlePieOption);
 
-      // redraw the radio graph
+      // redraw the radio graph 
       var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
       noise_values = [
         response['noise']['score'],
@@ -170,10 +280,10 @@ var get_safety = function(dom) {
           radar: {
               // shape: 'circle',
               indicator: [
-                 { name: 'score', max: 200},
-                 { name: 'traffic', max: 200},
-                 { name: 'airport', max: 200},
-                 { name: 'local', max: 200},
+                 { name: 'score', max: 100},
+                 { name: 'traffic', max: 100},
+                 { name: 'airport', max: 100},
+                 { name: 'local', max: 100},
               ]
           },
           series: [{
@@ -189,7 +299,6 @@ var get_safety = function(dom) {
           }]
       };
       singleRadioChart.setOption(singelRadioOption);
-
     }
   });
 }
@@ -215,7 +324,12 @@ var get_rank = function(dom) {
     contentType: "application/json; charset=utf-8",
     type: 'post',
     success: function(response) {
+
+      $('#multi-location-radius')[0].innerText = data['radius'];
+      $('.graph').hide();
+      $('.multi-graph').show();
       results = response['results'];  // use the actual data
+
       // redraw the multi graph
       var multiChart = echarts.init(document.getElementById('multi-graph'));
       // get series
@@ -283,13 +397,65 @@ var get_rank = function(dom) {
         ],
         data: results_for_table,
       })
+
+      // redraw the radar graph
+
+      var multiNoiseChart = echarts.init(document.getElementById('multi-noise-graph'));
+      var multi_radar_data = []
+      for (var i=0; i<locations.length; i++) {
+        var tmp_data = {
+          'name': locations[i],
+          'value': [
+            results[i]['noise']['score'],
+            results[i]['noise']['traffic'],
+            results[i]['noise']['airport'],
+            results[i]['noise']['local'],
+          ]
+        }
+        multi_radar_data.push(tmp_data)
+      }
+      MultiRadarOption = {
+        title: {
+            text: ''
+        },
+        tooltip: {},
+        legend: {
+            data: locations
+        },
+        radar: {
+            // shape: 'circle',
+            indicator: [
+               { name: 'Score', max: 100},
+               { name: 'traffic', max: 100},
+               { name: 'airport', max: 100},
+               { name: 'local', max: 100},
+            ]
+        },
+        series: [{
+            name: '',
+            type: 'radar',
+            // areaStyle: {normal: {}},
+            data: multi_radar_data,
+            // data : [
+            //     {
+            //         value : [43, 10, 28,50,],
+            //         name : 'location1'
+            //     },
+            //      {
+            //         value : [50, 14, 28, 31],
+            //         name : 'location2'
+            //     }
+            // ]
+        }]
+      };
+      multiNoiseChart.setOption(MultiRadarOption)
     }
   });
 }
 
 var add_city_input = function() {
   var new_input = document.createElement('input')
-  new_input.className = 'location'
+  new_input.className = 'location form-control'
   new_input.type = 'text'
   new_input.value = '5455 S blackstone ave'
   $('#locations')[0].appendChild(new_input)
@@ -298,7 +464,7 @@ var add_city_input = function() {
 var init = function() {
   console.log("page loaded");
 
-  // init the single city graph    # single_graph
+  // init the single city graph
   var singleChart = echarts.init(document.getElementById('single-graph'));
   singleOption = {
     tooltip : {
@@ -308,7 +474,7 @@ var init = function() {
       }
     },
     legend: {
-      data:['Toggle Area','Toggle City Average']
+      data:['area','total']
     },
     grid: {
       left: '3%',
@@ -319,7 +485,7 @@ var init = function() {
     xAxis : [
       {
         type : 'category',
-        data : ['Total','Violence','Residential','Property']
+        data : ['total','violence','residential','property']
       }
     ],
     yAxis : [
@@ -329,21 +495,18 @@ var init = function() {
     ],
     series : [
       {
-          name:'Toggle Area',
+          name:'area',
           type:'bar',
-          data:[967, 332, 301, 334]
+          data:[120, 332, 301, 334]
       },
       {
-          name:'Toggle City Average',
+          name:'city',
           type:'bar',
-          data:[367, 132, 101, 134]
+          data:[120, 132, 101, 134]
       },
     ]
   };
   singleChart.setOption(singleOption)
-
-
-
 
   var multiChart = echarts.init(document.getElementById('multi-graph'));
   multiOption = {
@@ -361,14 +524,11 @@ var init = function() {
       right: '4%',
       bottom: '3%',
       containLabel: true
-
-
-    }, //#@2 multi_chart
-
+    },
     xAxis : [
       {
         type : 'category',
-        data : ['Total','Violence','Residential','Property']
+        data : ['total','violence','residential','property']
       }
     ],
     yAxis : [
@@ -424,14 +584,14 @@ var init = function() {
   // init the pie graph
   var singlePieChart = echarts.init(document.getElementById('single-pie-graph'));
   singlePieOption = {
-    //backgroundColor: '#000000',
+    backgroundColor: '#2c343c',
 
     title: {
-      text: 'Crime Category Breakdown',
+      text: 'Crime Pie',
       left: 'center',
       top: 20,
       textStyle: {
-          color: '#000'
+          color: '#ccc'
       }
     },
 
@@ -463,14 +623,14 @@ var init = function() {
         label: {
           normal: {
               textStyle: {
-                  color: 'rgba(0, 0, 0, 0.7)'
+                  color: 'rgba(0, 0, 0, 0.3)'
               }
           }
         },
         labelLine: {
           normal: {
               lineStyle: {
-                  color: 'rgba(0, 0, 0, 0.7)'
+                  color: 'rgba(0, 0, 0, 0.3)'
               },
               smooth: 0.2,
               length: 10,
@@ -500,23 +660,19 @@ var init = function() {
   var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
   singelRadioOption = {
       title: {
-          text: 'Noise Graph',
-          left: 'center',
-          top:-5,
-
+          text: 'Noise Graph'
       },
       tooltip: {},
       legend: {
-          data: ['Noise info'],
-          left:'right',
+          data: ['Noise info']
       },
       radar: {
-          // shape: 'circle', radar_label
+          // shape: 'circle',
           indicator: [
-             { name: 'Overall', max: 200},
-             { name: 'Traffic', max: 200},
-             { name: 'Airport', max: 200},
-             { name: 'Local', max: 200},
+             { name: 'score', max: 200},
+             { name: 'traffic', max: 200},
+             { name: 'airport', max: 200},
+             { name: 'local', max: 200},
           ]
       },
       series: [{
