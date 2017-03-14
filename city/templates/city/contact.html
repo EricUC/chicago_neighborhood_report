@@ -1,4 +1,6 @@
-<html>
+<!-- <html> -->
+
+
   <head>
     <title>Chicago Neighborhood Report</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -10,6 +12,9 @@
 
 
 </head>
+
+{% extends 'city/base.html' %}
+{% block content %}
 <body>
 <div class="container">
 	<div class="row">
@@ -55,4 +60,7 @@
       </div>
 	</div>
 </div>
-</body></html>
+</body>
+{% endblock %}
+
+<!-- </html> -->
