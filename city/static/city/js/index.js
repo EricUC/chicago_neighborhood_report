@@ -1,3 +1,22 @@
+// 以下是需要做出的功能改动：
+//  1. 比较模式的总评table:
+//    1.1 需要把四个表头文字改成：address, safety, noise level, convenience,
+//        并且去掉“／”和权重数字 ok
+//    1.2 更改各项分值的计算方法为百分制：
+//      1.2.1 safety: 以 crime city total average 为中间值，0犯罪为100分，
+//            city total average的两倍为一百分，由此计算area total的得分。 ok, 2倍的时候应该为0分吧
+//      1.2.2 noise level: 以100分为100分， 50分为零分，由此计算noise core的得分。 ok
+//      1.2.3 convenience: 不太清楚这个怎么算的，但是最大值为100分，最大值的 2/3 为50分，
+//                         最大值的1/3或以下为零分。
+//    1.3 在文本"Summary of the several locations of around 1 miles"的位置(表格上方)，
+//        写一个自动生成文本的总结句, 在以下文本中嵌入总分最高的地址。
+//        “all criteria considered, (哪个地址) has the best overall neighborhood.” ok
+//  2. Crime graph
+//    2.1 去掉分项条形图内部的间隙（即不同颜色、紧挨着的条形之间的间隙） ok
+//    2.2 加上自动生成文本的总结句: "(哪个地址)'s neighborhood is the safest." 以及
+//        "(哪个地址) has the lowest residential crime rate." ok
+//  3. 比较模式需要加上convenience横条形图 ok
+//  4. 其他之前提过的改动。
 var get_data_fake = function(data) {
   return {
     'area total': 2053,
@@ -44,7 +63,7 @@ var get_safety = function(dom) {
       // set the single-summary-crime-rate span value
       doms = $(".single-summary-crime-rate")
       for (var i=0; i< doms.length; i++) {
-        doms[i].innerText = parseInt((response['area total'] - response['city total average']) / response['city total average'] * 100) + '%'
+        doms[i].innerText = Math.abs(parseInt((response['area total'] - response['city total average']) / response['city total average'] * 100))
       }
       // set the single-summary-crime-type
       doms = $(".single-summary-crime-type")
@@ -63,10 +82,11 @@ var get_safety = function(dom) {
       }
 
       // set the single-summary-noise-below
+      // 这改了自动生成文本的条件 80分以上high, 70分以下low, 之间moderate
       doms = $(".single-summary-noise-below")
-      if (response['noise']['score'] > response['noise']['locale']) {
+      if (response['noise']['score'] > 80) {
         innerText = "high"
-      } else if (response['noise']['score'] < response['noise']['locale']) {
+      } else if (response['noise']['score'] < 70) {
         innerText = "low"
       } else {
         innerText = "moderate"
@@ -102,16 +122,18 @@ var get_safety = function(dom) {
       }
 
       // redraw the convenient graph
+      console.log("create the convenient graph")
       var convenientChart = echarts.init(document.getElementById('single-convenient-graph'));
       var convenientData = [
         response['life_result']['restaurant'],
         response['life_result']['shop'],
         response['life_result']['transport'],
       ]
+      console.log(convenientData)
       ConvenientOption = {
         title: {
-            text: 'The result of googlemap',
-            subtext: 'if the enumber is more than 100, it means 100+'
+            text: 'Nearby Venues',
+            subtext: '(number of nearby places by type)'
         },
         tooltip: {
             trigger: 'axis',
@@ -134,7 +156,7 @@ var get_safety = function(dom) {
         },
         yAxis: {
           type: 'category',
-          data: ['restaurant', 'shop', 'transport'],
+          data: ['Restaurant', 'Shop', 'Transport'],
         },
         series: [
           {
@@ -273,7 +295,7 @@ var get_safety = function(dom) {
       };
       singlePieChart.setOption(singlePieOption);
 
-      // redraw the radio graph 
+      // redraw the radio graph
       var singleRadioChart = echarts.init(document.getElementById('single-radio-graph'));
       noise_values = [
         response['noise']['score'],
