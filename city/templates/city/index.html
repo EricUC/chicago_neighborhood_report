@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!-- <!DOCTYPE html>
+<html> -->
   <head>
     <title>Chicago Neighborhood Brief</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -30,8 +30,12 @@
     </style>
   </head>
 
-  <body onload="init()">
+  {% extends 'city/base.html' %}
+  {% block content %}
+
+  <!-- <body onload="init()"> -->
      <c>&nbsp;Chicago Neighborhood Brief</c>
+
     <hr>
     <div class="body">
       <div class="control-panel">
@@ -117,5 +121,9 @@
     <script src="/static/bootstrap3/js/bootstrap.min.js"></script>
     <script src="/static/bootstrap-slider/bootstrap-slider.js"></script>
     <script src="/static/bootstrap-table/bootstrap-table.min.js"></script>
-  </body>
-</html>
+
+{% endblock content %}
+
+
+  <!-- </body>
+</html> -->
