@@ -1,3 +1,14 @@
+# Chicago Neighborhood Brief
+
+## Han-Ji-Ji
+
+### Project introduction
+
+Here you have Chicago Neighborhood Brief, an neighborhood evaluation system that aims to help apartment seekers finalize their rental decision. We  Chicago Neighborhood Brief allows user to define a radius of one address based as the neighborhood, then analyze the safety, convenience, and noise-level of that neighborhood. This system also allows multiple location comparison.
+
+###
+
+
 How to run the website:
 
 Make sure you have redis
