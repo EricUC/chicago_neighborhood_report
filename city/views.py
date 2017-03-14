@@ -35,7 +35,7 @@ def get_city_info(location, radius):
     # # get the noise information from crawl_noise api
     # noise_int = crawl_noise.crawl_noise(location)
 
-    # # get the life information from 
+    # # get the life information from
     # life_result = {}
     # life_result = get_life_result(location, radius)
 
@@ -94,7 +94,7 @@ def get_life_result_lazy(location, radius):
     }
     r.rpush('task', json.dumps(data))
     return key
-    
+
 def get_city_info_lazy(location, radius):
     """
     given the location and radius, return a redis key as soon as possible
@@ -178,3 +178,15 @@ def rankview(request):
         'results': results,
     }
     return JsonResponse(response)
+
+def test(request):
+    return render(request, 'city/test.html')
+
+def base(request):
+    return render(request, 'city/base.html')
+
+def FAQs(request):
+    return render(request, 'city/FAQs.html')
+
+def contact(request):
+    return render(request, 'city/contact.html')

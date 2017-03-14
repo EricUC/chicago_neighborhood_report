@@ -1,23 +1,7 @@
-<!-- 以下是需要做出的页面改动 -->
-<!-- 1.左侧搜索栏 -->
-<!--  1.1 背景颜色改成浅灰色: #D5D5D5 ok -->
-<!--  1.2 去掉或隐藏choose criteria中的三个yes/no 选项 ok -->
-<!--  1.3 crime weight拖动条不显示数值-- ok >
-<!-- 2. 图表 -->
-<!--  2.1 crime pie把白颜色的部分换成某种红色 ok-->
-<!--  -->
-<!--  2.2 去掉crime graph的间隙 ok-->
-<!--  2.3 所有的单词首字母大写 不确定-->
-<!-- 3. 自动生成语句 -->
-<!--  3.1 single location 总结句: "This area is (safe/not safe), (convenient/inconvenient), with (low/moderate/high) noise level.-->
-<!--    3.1.2 评判convenience算法用类似比较模式中的convenience score来判断 -->
-<!--  3.2 convenience 总结句: "This neighbohood is convenient for : (dining out, and/or shopping, and/or public transit.)" -->
-<!-- 4. 右侧结果栏左侧加一些 margin 这个是padding -->
-<!-- 5. 其他之前提到的改动。 -->
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Chicago Neighborhood Report</title>
+    <title>Chicago Neighborhood Brief</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <script src="/static/city/js/jquery-3.1.0.js"></script>
     <link rel="stylesheet" href="/static/bootstrap3/css/bootstrap.min.css">
@@ -30,38 +14,55 @@
     <link href='//fonts.googleapis.com/css?family=Raleway Dots' rel='stylesheet'>
     <link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
     <link href='//fonts.googleapis.com/css?family=Alfa Slab One' rel='stylesheet'>
-
+    <style>
+    c {
+        font-family: 'Alfa Slab One';font-size: 50px;
+    }
+    d {
+        font-family: 'Raleway Dots';font-size: 28px;
+    }
+    e {
+        font-family: 'Raleway';font-size: 28px;
+    }
+    f {
+      font-family: 'Raleway';font-size: 16px;
+    }
+    </style>
   </head>
+
   <body onload="init()">
-    <h1>Chicago Neighborhood Report</h1>
+     <c>&nbsp;Chicago Neighborhood Brief</c>
     <hr>
     <div class="body">
       <div class="control-panel">
         <div class="single-panel">
-          <h4 class="title">Single location</h4><br>
-          <label>Input an address:</label><br>
+          <e><a>Single Locations</a></e><br>
+          <label>Input address below:</label><br>
           <input class="input form-control" type='text' id="location" value='5455 S blackstone ave'><br>
-          <label>Radius(mile)</label><br>
+          <label>Neighborhood radius (mile):</label><br>
           <input class="input form-control" type="text" id="radius" value='1'><br>
-          <strong>Choose criteria</strong><br>
+          <!-- <strong>Choose criteria</strong><br>
           Crime/Safety: <br>
           Noise: <br>
-          Convenience: <br>
-          <button onclick="get_safety(this)" class="btn btn-info" style='margin-left: 120px'>Search</button>
+          Convenience: <br> -->
+          <button onclick="get_safety(this)" class="btn btn-info" style='margin-right: 120px'>Search</button>
         </div>
         <div class="multiple-panel">
-          <h4 class="title">Multi-Location</h4><br>
+          <e><a>Multi Locations</a></e><br>
           <div id="locations">
             <input type="text" class="location input form-control" value='5455 S blackstone ave'>
             <input type="text" class="location input form-control" value='1001 S. South State Street, Chicago, IL 60615'>
           </div>
-          <button onclick="add_city_input()" class="btn">Add more address(es)</button><br>
-            <label>Radius(mile)</label>
+          <button onclick="add_city_input()" class="btn">Add more to compare: </button><br>
+            <label>Neighborhood radius (mile):</label>
             <input type="text" class="form-control" id="radius2" value='1'><br>
-          <button onclick="get_rank(this)" class="btn btn-info" style="margin-left: 120px">Search</button><br>
-          Crime weight: <br><input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1" data-slider-tooltip="hide"><br>
-          Noise weight: <br><input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
-          Convenient weight: <br><input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          <button onclick="get_rank(this)" class="btn btn-info" style="margin-right: 120px">Search</button><br>
+          <br>Safety weight: <br>
+          <input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1" data-slider-tooltip="hide"><br>
+          Noise level weight: <br>
+          <input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          Convenience weight: <br>
+          <input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
         </div>
       </div>
       <div class="right graph-container">
@@ -69,22 +70,27 @@
           <h1>Welcome! Please search on the left.</h1>
         </div>
         <div class="single-graph graph" style="display: none">
-          <p class="summary">This area is <span class="single-summary-crime-safe-not-safe">(safe/not safe)</span>,
-            (convenient/inconvenient), with (low/moderate/high) noise level<p>
+<!-- if no function implemented, delete this summary line below-->
+          <div style="max-width:600px; word-wrap:break-word;"><<p class="summary">
+            This area is <span class="single-summary-crime-safe-not-safe">(safe/not safe)</span>,
+            (convenient/inconvenient), with (low/moderate/high) noise level<p></div>
           <br>
-          <p class="summary">I. Crime</p>
+          <e class="summary">I. Crime</e>
+          <div style="max-width:600px; word-wrap:break-word;">
           <p class="summary">This neighborhood's safety is <span class="single-summary-crime-below"></span> Chicago average.</p><br>
           <p class="summary">Last year, its crime rate is <span class="single-summary-crime-rate"></span> percent <span class="single-summary-crime-below"></span> Chicago average, in terms of number of crime cases by neighborhood area.</p>
+          </div>
           <div id="single-graph" style="width: 600px; height: 400px;">
           </div>
-          <p class="summary"><span class="transform single-summary-crime-type"></span> is the prevalent crime type in this neighborhood.</p>
+          <div id="single-graph" style="width: 600px; height: 400px;">
+          <p class="summary"><span class="transform single-summary-crime-type"></span> is the prevalent crime type in this neighborhood.</p></div>
           <div id="single-pie-graph" style="width: 600px; height: 400px;">
           </div>
-          <p class="summary">II. Noise</p>
+          <e class="summary">II. Noise Level</e>
           <p class="summary">This neighborhood's noise level is <span class="single-summary-noise-below"></span> with <span class="single-summary-noise-type"></span> being the main noise source</p>
           <div id="single-radio-graph" style="width: 600px; height: 400px;">
           </div>
-          <p class="summary">III. Convenience</p>
+          <e class="summary">III. Convenience</e>
           <div id="single-convenient-graph" style="width: 600px; height: 400px;">
           </div>
         </div>
@@ -96,11 +102,12 @@
           <p class="summary"><span class="multi-summary-safe-place"></span>'s neighborhood is the safest. <span class="multi-summary-safe-place"></span> has the lowest residential crime rate.</p>
           <div id="multi-graph" style="width: 600px; height: 400px;">
           </div>
-          <!-- 这里需要一个自动生成文本的function, 比较用户所给的地址中，哪个最安静 -->
+<!-- 这里需要一个自动生成文本的function, 比较用户所给的地址中，哪个最安静 -->
           <h4>(哪个地址) has the lowest noise-level.</h4>
           <div id="multi-noise-graph" style="width: 600px; height: 400px;">
           </div>
-          <h4>The convenient Graph</h4>
+          <e>Convenience graph</e>
+          <div id="single-graph" style="width: 600px; height: 400px;">number of nearby venues by types</div>
           <div id="multi-convenient-graph" style="width: 600px; height: 400px;">
           </div>
         </div>
