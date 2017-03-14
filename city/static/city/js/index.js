@@ -411,7 +411,7 @@ var get_rank = function(dom) {
       // calculate the result
       // redraw the table
       var get_crime_score = function (local, city) {
-        return (2 * city - local) / 2 * city
+        return (2 * city - local) / (2 * city)
       }
       var get_noise_score = function (score) {
         return 2 * score - 100
@@ -459,16 +459,29 @@ var get_rank = function(dom) {
       doms = $(".multi-summary-safe-place")
       var lowerest_crime = results_for_table[0]["area total"];
       var lowerest_place = results_for_table[0]["name"];
-      for (var i=0; i< doms.length; i++ ) {
-        if (results_for_table[0]["area total"] < lowerest_crime) {
-          lowerest_crime = results_for_table[0]["area total"]
-          lowerest_place = results_for_table[0]["name"]
+      for (var i=0; i< locations.length; i++ ) {
+        if (results_for_table[i]["area total"] < lowerest_crime) {
+          lowerest_crime = results_for_table[i]["area total"]
+          lowerest_place = results_for_table[i]["name"]
         }
       }
       for (var i=0;i<doms.length; i++) {
         doms[i].innerText = lowerest_place
       }
 
+      // set the multi-summary-noise-place
+      doms = $(".multi-summary-noise-place")
+      var lowerest_noise = results[0]['noise']['score']
+      var lowerest_noise_place = locations[0]
+      for (var i=0; i< locations.length; i++) {
+          if (results[i]['noise']['score'] < lowerest_noise) {
+                lowerest_noise = results[i]['noise']['score'];
+                    lowerest_place = locations[i]
+                      }
+      }
+      for (var i=0; i< doms.length; i++ ){
+          doms[i].innerText = lowerest_noise_place
+      }
       // redraw the radar graph
 
       var multiNoiseChart = echarts.init(document.getElementById('multi-noise-graph'));

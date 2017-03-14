@@ -42,7 +42,7 @@
         <div class="single-panel">
           <e><a>Single Locations</a></e><br>
           <label>Input address below:</label><br>
-          <input class="input form-control" type='text' id="location" value='5455 S blackstone ave'><br>
+          <input class="input form-control" type='text' id="location" value=''><br>
           <label>Neighborhood radius (mile):</label><br>
           <input class="input form-control" type="text" id="radius" value='1'><br>
           <!-- <strong>Choose criteria</strong><br>
@@ -54,8 +54,8 @@
         <div class="multiple-panel">
           <e><a>Multi Locations</a></e><br>
           <div id="locations">
-            <input type="text" class="location input form-control" value='5455 S blackstone ave'>
-            <input type="text" class="location input form-control" value='1001 S. South State Street, Chicago, IL 60615'>
+            <input type="text" class="location input form-control" value=''>
+            <input type="text" class="location input form-control" value=''>
           </div>
           <button onclick="add_city_input()" class="btn">Add more to compare: </button><br>
             <label>Neighborhood radius (mile):</label>
@@ -107,7 +107,7 @@
           <div id="multi-graph" style="width: 600px; height: 400px;">
           </div>
 <!-- 这里需要一个自动生成文本的function, 比较用户所给的地址中，哪个最安静 -->
-          <h4>(哪个地址) has the lowest noise-level.</h4>
+          <h4><span class="multi-summary-noise-place"></span> has the lowest noise-level.</h4>
           <div id="multi-noise-graph" style="width: 600px; height: 400px;">
           </div>
           <e>Convenience graph</e>
