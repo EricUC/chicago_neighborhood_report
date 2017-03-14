@@ -8,17 +8,18 @@ Here you have Chicago Neighborhood Brief, an neighborhood evaluation system that
 
 ### Data sources
 
-1. Coogle API-Convenience data
+1. Convenience data: Coogle Maps Geocoding API, Google Places API Web Service, Google Maps Distance Matrix API
 
-API: Google Maps Geocoding API, Google Places API Web Service, Google Maps Distance Matrix API: https://developers.google.com/places/web-service/
+2. Crime data: City of Chicago Data Portal
 
-2. City of Chicago Data Portal-Crime data
+3. Noise data: Howloud.com
 
-3. Howloud.com-Noise data
+
+Crime data is based on the one year crime case dataset from city of Chicago data portal, ranging from last week to a year prior. Convenience rating is based on google maps information, which updates daily. Noise level data is based on a patented service provided by howloud.com. There is no public information available on how current their data is.
+
 
 ### Procedures
 
-Task Required
 1. Data gathering and cleaning from above data source
 a. Tools: Python script and corresponding libraries, HTML
 b. Subtasks: data cleaning and munging
@@ -28,10 +29,8 @@ a. Tools: SQL, perhaps JavaScript
 a. Tools: Python, SQL
 b. Subtasks: Apartment evaluation model and ordering algorithms based on the data
 4. Data visualization
-a. Tools: Map API, Python, SQL, HTML, perhaps JavaScript
-b. Subtasks: UI, other necessary charts or lists
-
-
+a. Tools: Map API, Python, SQL, HTML, JavaScript, css
+b. Subtasks: UI, Baidu Echart
 
 
 ### How to run the website:
