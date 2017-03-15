@@ -5,11 +5,17 @@
 ### File structure
 
 ------Project Management: Folder of past submitted and presentation docs.
+
   |
+
   |
+
    ---Data Processing: Folder of scripts about offline Crime SQL databases.
+
   |
+
   |
+
    ---Website: Client side and server side, including API and scrawler scripts.
 
 ### Project introduction
