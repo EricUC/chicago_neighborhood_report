@@ -1,6 +1,22 @@
 # Chicago Neighborhood Brief
 
-## Team: Han-Ji-Ji
+## Team: Han-Ji-Ji, March 14, 2017
+
+### File structure
+
+------Project Management: Folder of past submitted and presentation docs.
+
+  |
+
+  |
+
+   ---Data Processing: Folder of scripts about offline Crime SQL databases.
+
+  |
+
+  |
+
+   ---Website: Client side and server side, including API and scrawler scripts.
 
 ### Project introduction
 
@@ -13,7 +29,6 @@ Here you have Chicago Neighborhood Brief, an neighborhood evaluation system that
 2. Crime data: City of Chicago Data Portal
 
 3. Noise data: Howloud.com
-
 
 Crime data is based on the one year crime case dataset from city of Chicago data portal, ranging from last week to a year prior. Convenience rating is based on google maps information, which updates daily. Noise level data is based on a patented service provided by howloud.com. There is no public information available on how current their data is.
 
@@ -33,9 +48,21 @@ a. Tools: Map API, Python, SQL, HTML, JavaScript, css
 b. Subtasks: UI, Baidu Echart
 
 
-### How to run the website:
+### How to run the website
 
 Make sure you have redis,
 1. In terminal, at this directory, run command "redis-server"
-2. Open another terminal, at the same directory, run "python3 manage.py handletask &" four times, then run "python3 manage.py runserver"
-3. Visit localhost: 8000/#
+2. Open one terminal and run "python3 manage.py runserver"
+3. Open at least another four terminals, at the same directory, run "python3 manage.py handletask" separately
+4. Visit localhost: 8000/
+
+### Note: Running time trade-off in comparison mode
+
+Please note that searching in comparison mode is more time-consuming than what you would expect from a standard commercial website, usually half a minute when we are testing.
+
+The reason behind is that our free API key issued by Google is limited by the number of requests per second. When the calls are exceeding the limit, the application has to pause for 2 seconds for the next request. This happens when trying to get more than 20 results using the token it returned to us. So as a trade-off of resulting numbers and speed, we felt 20 results is inadequate for our report service, thus we sacrifice time for a more fulfilled result.
+
+Please see more details in this document:
+https://developers.google.com/maps/premium/previous-licenses/articles/usage-limits
+
+

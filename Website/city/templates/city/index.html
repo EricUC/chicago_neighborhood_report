@@ -1,0 +1,142 @@
+<html>
+  <head>
+    <title>Chicago Neighborhood Brief</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="/static/city/js/jquery-3.1.0.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap3/css/bootstrap.min.css">
+    <link href="/static/bootstrap-slider/bootstrap-slider.css" rel="stylesheet">
+    <link rel="stylesheet/less" type="text/css" href="/static/city/index.less">
+    <script src="/static/js/less.min.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/city/js/index.js"></script>
+    <link href='//fonts.googleapis.com/css?family=Raleway Dots' rel='stylesheet'>
+    <link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <link href='//fonts.googleapis.com/css?family=Alfa Slab One' rel='stylesheet'>
+    <style>
+    c {
+        font-family: 'Alfa Slab One';font-size: 50px;
+    }
+    d {
+        font-family: 'Raleway Dots';font-size: 28px;
+    }
+    e {
+        font-family: 'Raleway';font-size: 28px;
+    }
+    f {
+      font-family: 'Raleway';font-size: 16px;
+    }
+    </style>
+  </head>
+<body onload="init()">
+
+  <nav class="navbar navbar-default">
+       <div class="container-fluid">
+         <div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <!-- <a class="navbar-brand" href="#">Han-ji-ji presents</a> -->
+         </div>
+         <div class="collapse navbar-collapse" id="myNavbar">
+           <ul class="nav navbar-nav">
+             <li class="active"><a href=/city>Home</a></li>
+             <li><a href=/city/FAQs>FAQs</a></li>
+             <li><a href=/city/contact>Contact</a></li>
+           </ul>
+           <ul class="nav navbar-nav navbar-right">
+             <li><a href=http://imgur.com/hP6quPK>
+               <span class="glyphicon glyphicon-hand-right"></span>&nbsp;&nbsp;Fun&nbsp;with&nbsp;hán-jī-jī</a></li>
+           </ul>
+         </div>
+       </div>
+     </nav>
+
+     <c>&nbsp;Chicago Neighborhood Brief</c>
+
+    <hr>
+    <div class="body">
+      <div class="control-panel">
+        <div class="single-panel">
+          <e><a>Single Locations</a></e><br>
+          <label>Input address below:</label><br>
+          <input class="input form-control" type='text' id="location" value=''><br>
+          <label>Neighborhood radius (mile):</label><br>
+          <input class="input form-control" type="text" id="radius" value='1'><br>
+          <!-- <strong>Choose criteria</strong><br>
+          Crime/Safety: <br>
+          Noise: <br>
+          Convenience: <br> -->
+          <button onclick="get_safety(this)" class="btn btn-info" style='margin-right: 120px'>Search</button>
+        </div>
+        <div class="multiple-panel">
+          <e><a>Multi Locations</a></e><br>
+          <div id="locations">
+            <input type="text" class="location input form-control" value=''>
+            <input type="text" class="location input form-control" value=''>
+          </div>
+          <button onclick="add_city_input()" class="btn">Add more to compare: </button><br>
+            <label>Neighborhood radius (mile):</label>
+            <input type="text" class="form-control" id="radius2" value='1'><br>
+          <button onclick="get_rank(this)" class="btn btn-info" style="margin-right: 120px">Search</button><br>
+          <br>Safety weight: <br>
+          <input id="crime-weight" type="text" data-slider-max="100" data-slider-step="1" data-slider-tooltip="hide"><br>
+          Noise level weight: <br>
+          <input id="noise-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+          Convenience weight: <br>
+          <input id="convenient-weight" type="text" data-slider-max="100" data-slider-step="1"><br>
+        </div>
+      </div>
+      <div class="right graph-container">
+        <div class="no-graph graph">
+          <h1>Welcome! Please search on the left.</h1>
+        </div>
+        <div class="single-graph graph" style="display: none">
+          <br>
+          <e class="summary">I. Crime</e>
+          <p class="summary">This neighborhood's safety is <span class="single-summary-crime-below"></span> Chicago average.</p><br>
+          <p class="summary">Last year, its crime rate is <span class="single-summary-crime-rate"></span> percent <span class="single-summary-crime-below"></span> Chicago average, in terms of number of crime cases by neighborhood area.</p>
+          <div id="single-graph" style="width: 600px; height: 400px;">
+          </div>
+          <p class="summary"><span class="transform single-summary-crime-type"></span> is the prevalent crime type in this neighborhood.</p>
+          <div id="single-pie-graph" style="width: 600px; height: 400px;">
+          </div>
+          <e class="summary">II. Noise Level</e>
+          <p class="summary">This neighborhood's noise level is <span class="single-summary-noise-below"></span> with <span class="single-summary-noise-type"></span> being the main noise source</p>
+          <div id="single-radio-graph" style="width: 600px; height: 400px;">
+          </div>
+          <e class="summary">III. Convenience</e>
+          <div id="single-convenient-graph" style="width: 600px; height: 400px;">
+          </div>
+        </div>
+        <div class="multi-graph graph" style="display: none">
+          <h4>Summary of the several locations of around <span id="multi-location-radius"></span> miles</h4>
+          <p class="summary">All criteria considered, <span class="multi-summary-best-place"></span> has the best overall neighborhood.</p>
+          <table data-toggle="table" id="multi-table">
+          </table>
+          <e class="summary">I. Crime</e>
+          <p class="summary"><span class="multi-summary-safe-place"></span>'s neighborhood is the safest. <span class="multi-summary-safe-place"></span> has the lowest residential crime rate.</p>
+          <div id="multi-graph" style="width: 600px; height: 400px;">
+          </div>
+          <e class="summary">II. Noise Level</e>
+          <h4><span class="multi-summary-noise-place"></span> has the lowest noise-level.</h4>
+          <div id="multi-noise-graph" style="width: 600px; height: 400px;">
+          </div>
+          <e class="summary">III. Convenience</e>
+          <e></e>
+          <p class="summary">number of nearby venues by types</p>
+          <div id="multi-convenient-graph" style="width: 600px; height: 400px;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/static/bootstrap3/js/tether.min.js"></script>
+    <script src="/static/bootstrap3/js/bootstrap.min.js"></script>
+    <script src="/static/bootstrap-slider/bootstrap-slider.js"></script>
+    <script src="/static/bootstrap-table/bootstrap-table.min.js"></script>
+
+
+
+</body>
+</html>
