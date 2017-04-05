@@ -2,6 +2,18 @@
 
 ## Team: Han-Ji-Ji, March 14, 2017
 
+
+
+### How to run the website
+
+Make sure you have redis,
+1. In terminal, change to the Website directory, run command "redis-server"
+2. Open one terminal, change to the Website directory and run  "python3 manage.py handletask&" four times
+3. Run "python3 manage.py runserver"
+4. Visit http://127.0.0.1:8000/
+
+
+
 ### File structure
 
 ------Project Management: Folder of past submitted and presentation docs.
@@ -47,14 +59,6 @@ b. Subtasks: Apartment evaluation model and ordering algorithms based on the dat
 a. Tools: Map API, Python, SQL, HTML, JavaScript, css
 b. Subtasks: UI, Baidu Echart
 
-
-### How to run the website
-
-Make sure you have redis,
-1. In terminal, at this directory, run command "redis-server"
-2. Open one terminal and run "python3 manage.py runserver"
-3. Open at least another four terminals, at the same directory, run "python3 manage.py handletask" separately
-4. Visit localhost: 8000/
 
 ### Note: Running time trade-off in comparison mode
 
