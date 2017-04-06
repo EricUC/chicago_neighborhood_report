@@ -17,28 +17,33 @@ Make sure you have redis,
 ### File structure
 
 ```
-Data Processing/Crime: Folder of scripts about offline Crime SQL databases.
-| - create_crime.sql: scheme and other commands to create crime database.
-| - crime_data_cleaning_01_test.ipynb: data cleaning and munging records.
+Data Processing/Crime
+|        Folder of scripts about offline Crime SQL databases
+| -- create_crime.sql
+|        Scheme and other commands to create crime database
+| -- crime_data_cleaning_01_test.ipynb
+|        Data cleaning and munging records
+| -- query_crime.py
+|        Query the total number of crime cases, given coordinates and radius
+Project Management
+|        Folder of past submitted and presentation docs
+| -- CS_Final_Presentation.key
+|        Final presentation keynote
+| -- CS_Project_Proposal.pdf
+|        Initial project proposal
+| -- Project_First_Check-in.pdf
+|        Task checklist showed at the first project checkpoint
+Website
+|        Client side and server side, including API and scrawler scripts.
+| -- 
+|
+README.md
+|        This file
+Website Effect.png
+|        A snapshot for the sample website output
 ```
 
-Data Processing: Folder of scripts about offline Crime SQL databases.
 
-* ​
-
-------Project Management: Folder of past submitted and presentation docs.
-
-  |
-
-  |
-
-   ---
-
-  |
-
-  |
-
-   ---Website: Client side and server side, including API and scrawler scripts.
 
 ### Project introduction
 
