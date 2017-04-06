@@ -16,13 +16,23 @@ Make sure you have redis,
 
 ### File structure
 
+```
+Data Processing/Crime: Folder of scripts about offline Crime SQL databases.
+| - create_crime.sql: scheme and other commands to create crime database.
+| - crime_data_cleaning_01_test.ipynb: data cleaning and munging records.
+```
+
+Data Processing: Folder of scripts about offline Crime SQL databases.
+
+* ​
+
 ------Project Management: Folder of past submitted and presentation docs.
 
   |
 
   |
 
-   ---Data Processing: Folder of scripts about offline Crime SQL databases.
+   ---
 
   |
 
@@ -48,16 +58,16 @@ Crime data is based on the one year crime case dataset from city of Chicago data
 ### Procedures
 
 1. Data gathering and cleaning from above data source
-a. Tools: Python script and corresponding libraries, HTML
-b. Subtasks: data cleaning and munging
+   a. Tools: Python script and corresponding libraries, HTML
+   b. Subtasks: data cleaning and munging
 2. Data storing and joining data from different sources
-a. Tools: SQL, perhaps JavaScript
+   a. Tools: SQL, perhaps JavaScript
 3. Data analysis and query realization
-a. Tools: Python, SQL
-b. Subtasks: Apartment evaluation model and ordering algorithms based on the data
+   a. Tools: Python, SQL
+   b. Subtasks: Apartment evaluation model and ordering algorithms based on the data
 4. Data visualization
-a. Tools: Map API, Python, SQL, HTML, JavaScript, css
-b. Subtasks: UI, Baidu Echart
+   a. Tools: Map API, Python, SQL, HTML, JavaScript, css
+   b. Subtasks: UI, Baidu Echart
 
 
 ### Note: Running time trade-off in comparison mode
